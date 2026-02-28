@@ -1,0 +1,42 @@
+# Data files (exported from BigQuery, potentially large)
+data/*.csv
+data/*.json
+data/*.parquet
+
+# Visualizations (generated)
+visualizations/*.png
+visualizations/*.svg
+visualizations/*.pdf
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Environment
+.env
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# BigQuery credentials
+*-credentials.json
+*-service-account.json
