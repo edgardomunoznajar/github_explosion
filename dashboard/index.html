@@ -3,7 +3,54 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Takeover - Tracking AI-Generated Commits on GitHub</title>
+<title>botcommits.dev - Tracking AI-Generated Commits on GitHub</title>
+<meta name="description" content="Live dashboard tracking AI-generated commits across all public GitHub repos. Claude Code grew from 24 to 5.2M commits/month in 13 months. Updated monthly with real BigQuery data.">
+<meta name="keywords" content="AI commits, vibe coding, Claude Code, GitHub, AI-generated code, Copilot, Aider, Devin, developer productivity, open source, bot commits">
+<meta name="author" content="Edgardo Munoz">
+<link rel="canonical" href="https://botcommits.dev">
+<link rel="icon" type="image/png" href="favicon.png">
+
+<!-- Open Graph (Facebook, LinkedIn) -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://botcommits.dev">
+<meta property="og:title" content="botcommits.dev - Every AI Commit on GitHub, Tracked">
+<meta property="og:description" content="Claude Code: 24 commits in Jan 2025. 5.2 million in Feb 2026. A 216,000x increase in 13 months. Live dashboard with real data.">
+<meta property="og:site_name" content="botcommits.dev">
+
+<!-- Twitter/X -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="botcommits.dev - Every AI Commit on GitHub, Tracked">
+<meta name="twitter:description" content="Claude Code: 24 commits in Jan 2025. 5.2 million in Feb 2026. A 216,000x increase in 13 months.">
+
+<!-- Structured data for Google -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "botcommits.dev",
+  "url": "https://botcommits.dev",
+  "description": "Live dashboard tracking AI-generated commits across all public GitHub repos.",
+  "applicationCategory": "DeveloperApplication",
+  "author": {
+    "@type": "Person",
+    "name": "Edgardo Munoz"
+  },
+  "dateModified": "2026-03-08",
+  "about": {
+    "@type": "Dataset",
+    "name": "AI-Attributed GitHub Commits",
+    "description": "Monthly counts of AI-generated commits detected via attribution markers in public GitHub repositories",
+    "temporalCoverage": "2025-01/2026-03",
+    "creator": {"@type": "Person", "name": "Edgardo Munoz"},
+    "distribution": {
+      "@type": "DataDownload",
+      "encodingFormat": "CSV",
+      "contentUrl": "https://github.com/edgardomunoznajar/github_explosion"
+    }
+  }
+}
+</script>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -132,7 +179,7 @@
 
 <div class="container">
   <header>
-    <h1>aitakeover.dev</h1>
+    <h1>botcommits.dev</h1>
     <p>Tracking AI-generated commits across all public GitHub repos. Updated monthly from GH Archive via BigQuery.</p>
   </header>
 
@@ -160,30 +207,8 @@
   </div>
 
   <div class="chart-section">
-    <h2>AI-Attributed Commits per Month <span style="font-size:0.75rem;color:#9a8b7a;font-weight:400">(Oct 2025 = incomplete GH Archive data)</span></h2>
-    <div class="chart-container">
-      <canvas id="timeseriesChart"></canvas>
-    </div>
-  </div>
-
-  <div class="grid-2">
-    <div class="chart-section">
-      <h2>Commits by AI Tool</h2>
-      <div class="chart-container">
-        <canvas id="toolChart"></canvas>
-      </div>
-    </div>
-    <div class="chart-section">
-      <h2>AI Share of Total Push Events</h2>
-      <div class="chart-container">
-        <canvas id="shareChart"></canvas>
-      </div>
-    </div>
-  </div>
-
-  <div class="chart-section">
-    <h2>Model Fit: Exponential vs Logistic vs Gompertz <span style="font-size:0.75rem;color:#9a8b7a;font-weight:400">(+ 6-month projection)</span></h2>
-    <div class="chart-container" style="height:420px;">
+    <h2>Growth Trajectory: Exponential vs Logistic vs Gompertz <span style="font-size:0.75rem;color:#9a8b7a;font-weight:400">(+ 6-month projection, shaded = private repo extrapolation)</span></h2>
+    <div class="chart-container" style="height:450px;">
       <canvas id="fitChart"></canvas>
     </div>
     <div style="margin-top:12px; display:flex; gap:24px; flex-wrap:wrap; font-size:0.8rem; color:#5a4a3a;">
@@ -195,7 +220,59 @@
       Best fit by AIC: <strong>Exponential</strong>. The logistic ceiling converged to the upper bound (~1B), meaning the data does not yet show saturation.
       With only 14 months of observations and a data quality gap at month 10, we cannot distinguish exponential from early-stage logistic.
       This does not predict indefinite exponential growth &mdash; it means the inflection point has not yet been observed.
+      <br><br>
+      <strong>Shaded band:</strong> Upper bound estimates total commits (public + private repos).
+      81.5% of GitHub contributions happen in private repos (GitHub Octoverse 2025), so the upper bound = public data &divide; 0.185.
+      This assumes equal AI adoption in private repos &mdash; a speculative extrapolation, not measured data.
     </p>
+  </div>
+
+  <div class="chart-section" style="background: #fff8f3; border-color: #e8c9a0;">
+    <h2 style="color:#6b3a2a;">The Iceberg: Public Repos Are Only 18.5% of GitHub Activity</h2>
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:16px; margin-top:8px;">
+      <div style="text-align:center;">
+        <div style="font-size:2rem; font-weight:700; color:#b5451b;" id="extrapolated-commits">~28M</div>
+        <div style="font-size:0.85rem; color:#7a6652;">Estimated total Claude commits/month</div>
+        <div style="font-size:0.75rem; color:#9a8b7a; margin-top:4px;">(public + private extrapolation)</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:2rem; font-weight:700; color:#b5451b;">81.5%</div>
+        <div style="font-size:0.85rem; color:#7a6652;">of GitHub contributions are in private repos</div>
+        <div style="font-size:0.75rem; color:#9a8b7a; margin-top:4px;">Source: GitHub Octoverse 2025</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:2rem; font-weight:700; color:#9a8b7a;">?</div>
+        <div style="font-size:0.85rem; color:#7a6652;">Copilot + Cursor commits (unattributed)</div>
+        <div style="font-size:0.75rem; color:#9a8b7a; margin-top:4px;">No attribution markers — invisible to this method</div>
+      </div>
+    </div>
+    <p style="margin-top:12px; font-size:0.8rem; color:#7a6652; border-top:1px solid #e0d5c7; padding-top:10px;">
+      <strong>Methodology:</strong> We observe 5.19M Claude commits in Feb 2026 from public repos.
+      Since 81.5% of GitHub activity is private, and assuming similar AI adoption in private repos,
+      the total is estimated at 5.19M &divide; 0.185 &approx; <strong>28M commits/month</strong>.
+      This is speculative — enterprise adoption may be higher or lower than public repo rates.
+      Copilot and Cursor leave no commit-level attribution markers and are excluded entirely.
+    </p>
+  </div>
+
+  <div class="grid-2">
+    <div class="chart-section">
+      <h2>Commits by AI Tool</h2>
+      <div class="chart-container">
+        <canvas id="toolChart"></canvas>
+      </div>
+    </div>
+    <div class="chart-section">
+      <h2>AI vs Human: Estimated Code Volume <span style="font-size:0.75rem;color:#9a8b7a;font-weight:400">(commits + diff size adjustment)</span></h2>
+      <div class="chart-container">
+        <canvas id="shareChart"></canvas>
+      </div>
+      <p style="margin-top:8px; font-size:0.8rem; color:#7a6652;">
+        <strong>Denominator:</strong> total push events from BigQuery (not total commits — each push averages ~3 commits).
+        <strong>Diff size adjustment:</strong> AI commits have ~2.5x larger diffs than human commits (per published research), so the <em>code volume</em> share is estimated at 2.5x the raw commit share.
+        Both lines shown. Copilot/Cursor are excluded (no attribution markers) — real AI share is higher.
+      </p>
+    </div>
   </div>
 
   <div class="grid-2">
@@ -256,11 +333,13 @@
         <li>This does <strong>not</strong> predict indefinite exponential growth. It means the inflection point of the S-curve has not yet been observed with 14 months of data. More data points are needed to distinguish the models.</li>
         <li>Projections beyond Feb 2026 are extrapolations and should be treated with appropriate skepticism. The exponential projects 104M commits/month by Aug 2026; the Gompertz projects 40M. The true value likely falls between them.</li>
       </ul>
+      <p style="margin-top:12px;"><strong>Open source</strong></p>
+      <p style="margin:4px 0 0 0;">Raw data (CSV), BigQuery queries, Python analysis scripts, and this dashboard are all available at <a href="https://github.com/edgardomunoznajar/github_explosion" style="color:#b5451b">github.com/edgardomunoznajar/github_explosion</a>. Contributions and corrections welcome via pull requests.</p>
     </div>
   </div>
 
   <footer>
-    Last updated: 2026-03-08. Source code on <a href="https://github.com/edgardomunoznajar/github_explosion" style="color:#b5451b">GitHub</a>.
+    Last updated: 2026-03-08. Open source &mdash; data, queries, and code on <a href="https://github.com/edgardomunoznajar/github_explosion">GitHub</a>. PRs welcome.
   </footer>
 </div>
 
@@ -342,39 +421,6 @@ document.getElementById('devs-change').textContent = 'peak (Aug 2025)';
 const shareEl = document.getElementById('share-change');
 shareEl.textContent = momChange(aiSharePct);
 
-// ── Timeseries chart (all AI commits) ─────────────────────────────────
-new Chart(document.getElementById('timeseriesChart'), {
-  type: 'line',
-  data: {
-    labels: LABELS,
-    datasets: [{
-      label: 'All AI Commits',
-      data: allCommits,
-      borderColor: '#b5451b',
-      backgroundColor: 'rgba(181,69,27,0.1)',
-      fill: true,
-      tension: 0.3,
-      pointRadius: 4,
-      pointHoverRadius: 7,
-    }]
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: { display: false },
-      tooltip: { callbacks: { label: ctx => fmt(ctx.parsed.y) + ' commits' } }
-    },
-    scales: {
-      y: {
-        grid: { color: '#f0e8dd' },
-        ticks: { callback: v => fmt(v) },
-      },
-      x: { grid: { display: false } }
-    }
-  }
-});
-
 // ── Tool breakdown (stacked area) ─────────────────────────────────────
 new Chart(document.getElementById('toolChart'), {
   type: 'line',
@@ -412,13 +458,28 @@ const FIT_GOMPERTZ = [62, 261, 960, 3147, 9290, 24918, 61241, 138995, 293383, 57
 // Actual data padded with nulls for projection months
 const actualPadded = [...TOOLS.claude, null, null, null, null, null, null];
 
+// Upper bound: public data ÷ 0.185 (81.5% of GitHub is private repos)
+const upperBound = actualPadded.map(v => v !== null ? Math.round(v / 0.185) : null);
+
 new Chart(document.getElementById('fitChart'), {
   type: 'line',
   data: {
     labels: PROJ_LABELS,
     datasets: [
       {
-        label: 'Actual (Claude)',
+        label: 'Est. total (public + private)',
+        data: upperBound,
+        borderColor: 'rgba(181,69,27,0.3)',
+        backgroundColor: 'rgba(181,69,27,0.08)',
+        fill: '+1',  // fill down to next dataset (Actual)
+        tension: 0,
+        pointRadius: 0,
+        borderWidth: 1,
+        borderDash: [3, 3],
+        spanGaps: false,
+      },
+      {
+        label: 'Actual (Claude, public only)',
         data: actualPadded,
         borderColor: '#2d1f0e',
         backgroundColor: 'rgba(45,31,14,0.15)',
@@ -433,30 +494,33 @@ new Chart(document.getElementById('fitChart'), {
         label: 'Exponential fit (R²=0.989)',
         data: FIT_EXP,
         borderColor: '#b5451b',
-        borderDash: [6, 3],
+        borderDash: [12, 4],
         fill: false,
         tension: 0.3,
-        pointRadius: 0,
-        borderWidth: 2,
+        pointRadius: 3,
+        pointStyle: 'triangle',
+        borderWidth: 3,
       },
       {
         label: 'Logistic fit (R²=0.989)',
         data: FIT_LOGISTIC,
-        borderColor: '#5a8a3c',
-        borderDash: [6, 3],
+        borderColor: '#2563eb',
+        borderDash: [4, 4],
         fill: false,
         tension: 0.3,
-        pointRadius: 0,
+        pointRadius: 3,
+        pointStyle: 'rectRot',
         borderWidth: 2,
       },
       {
         label: 'Gompertz fit (R²=0.981)',
         data: FIT_GOMPERTZ,
-        borderColor: '#c9956b',
-        borderDash: [6, 3],
+        borderColor: '#9333ea',
+        borderDash: [2, 6],
         fill: false,
         tension: 0.3,
-        pointRadius: 0,
+        pointRadius: 3,
+        pointStyle: 'crossRot',
         borderWidth: 2,
       },
     ]
@@ -493,26 +557,43 @@ new Chart(document.getElementById('fitChart'), {
 });
 
 // ── AI share chart ────────────────────────────────────────────────────
+// Raw share: AI commits / total push events
+// Volume-adjusted: multiply by 2.5x for larger diff size (per published research)
+const aiShareAdjusted = aiSharePct.map(v => v * 2.5);
+
 new Chart(document.getElementById('shareChart'), {
   type: 'line',
   data: {
     labels: LABELS,
-    datasets: [{
-      label: 'AI Share %',
-      data: aiSharePct,
-      borderColor: '#5a8a3c',
-      backgroundColor: 'rgba(90,138,60,0.1)',
-      fill: true,
-      tension: 0.3,
-      pointRadius: 4,
-    }]
+    datasets: [
+      {
+        label: 'Raw commit share (AI commits / push events)',
+        data: aiSharePct,
+        borderColor: '#b5451b',
+        backgroundColor: 'rgba(181,69,27,0.08)',
+        fill: true,
+        tension: 0.3,
+        pointRadius: 4,
+        borderWidth: 2,
+      },
+      {
+        label: 'Est. code volume share (×2.5 diff size)',
+        data: aiShareAdjusted,
+        borderColor: '#5a8a3c',
+        borderDash: [6, 3],
+        fill: false,
+        tension: 0.3,
+        pointRadius: 4,
+        borderWidth: 2,
+      },
+    ]
   },
   options: {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: { display: false },
-      tooltip: { callbacks: { label: ctx => ctx.parsed.y.toFixed(3) + '%' } }
+      legend: { position: 'bottom', labels: { boxWidth: 12, padding: 16 } },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label.split(' (')[0] + ': ' + ctx.parsed.y.toFixed(2) + '%' } }
     },
     scales: {
       y: { grid: { color: '#f0e8dd' }, ticks: { callback: v => v.toFixed(1) + '%' } },
