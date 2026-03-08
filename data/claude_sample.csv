@@ -1,0 +1,503 @@
+created_at,developer,repo_name,commit_sha,commit_message,author_name,author_email
+2025-01-28 23:01:55+00:00,tuyoleni,tuyoleni/moodbod,1f5c357e00e12acdeeea09729f71a6da910b2c0b,"feat: update favicon and app icons
+
+- Add new favicon in multiple sizes (16x16, 32x32)
+- Add PWA icons (192x192, 512x512)
+- Add Apple touch icon (180x180)
+- Configure icon paths in layout.tsx
+- Update manifest.json icon references
+
+Co-authored-by: Claude <claude@anthropic.com>",tuyoleni,d61ffd99b0ce4b875ee9753a5b643afa0adfa021@gmail.com
+2025-01-28 14:54:41+00:00,tuyoleni,tuyoleni/moodbod,1889ec59dea06ca27a7ccdbed7acd9c7e65f3b72,"feat: implement complete PWA and SEO setup
+
+- Add comprehensive SEO metadata configuration
+- Configure PWA manifest and icons
+- Move manifest.json to public directory
+- Organize favicon assets in public/icons
+- Update icon paths and references
+- Add OpenGraph and social media metadata
+- Configure proper favicon display settings
+
+Co-authored-by: Claude <claude@anthropic.com>",tuyoleni,d61ffd99b0ce4b875ee9753a5b643afa0adfa021@gmail.com
+2025-01-28 07:15:57+00:00,jerome3o-anthropic,evalstate/inspector,2f513df6c150b934876bd752456ab1345b2f7db9,"feat: improve request history and tab persistence
+
+- Add failed requests to history with error messages for better debugging
+- Persist selected tab in URL hash and restore on page load
+- Fix formatting of timeout parameter parsing
+
+🤖 Generated with Claude CLI.
+
+Co-Authored-By: Claude <noreply@anthropic.com>",Ben Mann,73675debcd8a436be48ec22211dcf44fe0df0a64@anthropic.com
+2025-01-22 23:46:47+00:00,catherio,anthropics/orjson,78b8b2d8260f90ae45e88421328634172c9763f3,"Update recursion tests to verify deep nesting support
+
+This fork intentionally allows deeper JSON nesting than upstream orjson.
+Update tests to verify this behavior instead of expecting errors.
+Also fix version test to accept post-release version format.
+
+🤖 Generated with Claude CLI.
+Co-Authored-By: Claude <noreply@anthropic.com>",Catherine Olsson,f0c64a7faf939a4d70df1b423563b04cb6478569@anthropic.com
+2025-01-22 23:46:47+00:00,catherio,anthropics/orjson,d6606f33c97d42635a7e190e281ba5e0d837829f,"Update tests to expect NaN/Infinity support and overflow handling
+
+🤖 Generated with Claude CLI.
+Co-Authored-By: Claude <noreply@anthropic.com>",Catherine Olsson,f0c64a7faf939a4d70df1b423563b04cb6478569@anthropic.com
+2025-01-21 19:39:53+00:00,matdotcx,matdotcx/carrus,7fbf47260f1ed2a23bc25e508ee0340cf1ccdb0a,"Update .gitignore to exclude Python bytecode files
+
+🤖 Generated with Claude CLI.
+Co-Authored-By: Claude <noreply@anthropic.com>",Diego Iaconelli,8354336224c63279aadd00a9621757ef4fdf31fc@anthropic.com
+2025-01-21 19:39:53+00:00,matdotcx,matdotcx/carrus,938a8ffaf11a40e807e7df834e6729771fe9eebd,"Add database module and test infrastructure
+
+Adds SQLite database support and comprehensive test suite for package management functionality. Test reports show all tests passing.
+
+🤖 Generated with Claude CLI.
+Co-Authored-By: Claude <noreply@anthropic.com>",Diego Iaconelli,8354336224c63279aadd00a9621757ef4fdf31fc@anthropic.com
+2025-01-21 19:39:53+00:00,matdotcx,matdotcx/carrus,f07473d297c33a3dfe3027db5513650952ec854e,"Implement proper build state tracking and error handling
+
+🤖 Generated with Claude CLI.
+Co-Authored-By: Claude <noreply@anthropic.com>",Diego Iaconelli,8354336224c63279aadd00a9621757ef4fdf31fc@anthropic.com
+2025-01-21 19:39:53+00:00,matdotcx,matdotcx/carrus,4aa3c88e911e90c97ef70db6a6a6cfba97edd8bc,"Fix MDM package builder and test suite
+
+- Fix MDM package builder to handle Pydantic models correctly
+- Skip code signing verification during tests
+- Improve error handling in build process
+
+🤖 Generated with Claude CLI.
+Co-Authored-By: Claude <noreply@anthropic.com>",Diego Iaconelli,8354336224c63279aadd00a9621757ef4fdf31fc@anthropic.com
+2025-01-21 19:39:53+00:00,matdotcx,matdotcx/carrus,396ebf3bed67534a6313f43caf0f9a1c3a1c25ea,"Update .gitignore to exclude txt, patch and csv files
+
+🤖 Generated with Claude CLI.
+Co-Authored-By: Claude <noreply@anthropic.com>",Diego Iaconelli,8354336224c63279aadd00a9621757ef4fdf31fc@anthropic.com
+2025-01-21 19:39:53+00:00,matdotcx,matdotcx/carrus,1c7434af15f2883fe3ef14001c4a789bad491354,"Remove Python bytecode files from git
+
+🤖 Generated with Claude CLI.
+Co-Authored-By: Claude <noreply@anthropic.com>",Diego Iaconelli,8354336224c63279aadd00a9621757ef4fdf31fc@anthropic.com
+2025-01-21 10:13:02+00:00,w3evolutions,W3EvolutionsLLC/anthropic-mcp-inspector,2f513df6c150b934876bd752456ab1345b2f7db9,"feat: improve request history and tab persistence
+
+- Add failed requests to history with error messages for better debugging
+- Persist selected tab in URL hash and restore on page load
+- Fix formatting of timeout parameter parsing
+
+🤖 Generated with Claude CLI.
+
+Co-Authored-By: Claude <noreply@anthropic.com>",Ben Mann,73675debcd8a436be48ec22211dcf44fe0df0a64@anthropic.com
+2025-01-17 18:54:38+00:00,catherio,anthropics/orjson,d6606f33c97d42635a7e190e281ba5e0d837829f,"Update tests to expect NaN/Infinity support and overflow handling
+
+🤖 Generated with Claude CLI.
+Co-Authored-By: Claude <noreply@anthropic.com>",Catherine Olsson,f0c64a7faf939a4d70df1b423563b04cb6478569@anthropic.com
+2025-01-17 18:54:38+00:00,catherio,anthropics/orjson,78b8b2d8260f90ae45e88421328634172c9763f3,"Update recursion tests to verify deep nesting support
+
+This fork intentionally allows deeper JSON nesting than upstream orjson.
+Update tests to verify this behavior instead of expecting errors.
+Also fix version test to accept post-release version format.
+
+🤖 Generated with Claude CLI.
+Co-Authored-By: Claude <noreply@anthropic.com>",Catherine Olsson,f0c64a7faf939a4d70df1b423563b04cb6478569@anthropic.com
+2025-01-17 11:20:54+00:00,ametel01,OilerNetwork/fossil-light-client,1f8d1df9497b912a4b7da99987f1adcacad9117a,"Tests for rust crates (#26)
+
+* test(relayer): add comprehensive unit tests
+
+Add extensive test suite for Relayer including:
+- Valid/invalid Ethereum address formats
+- Environment variable handling
+- Edge cases for hex values
+- Private key validation
+- Whitespace and empty string handling
+- Unicode character handling
+- Case sensitivity tests
+- Maximum value tests
+
+Tests ensure robust input validation and error handling
+in the Relayer implementation.""
+
+* test: add unit tests for StarknetAccount
+
+Add comprehensive test suite for account.rs including:
+- Basic account creation tests
+- Edge cases for private key and address
+- MMR proof verification tests
+- Empty input validation tests
+
+* test(starknet-handler): add unit tests for StarknetProvider and StarknetAccount
+
+- Added basic unit tests for StarknetAccount creation and MMR proof verification
+- Added mock tests for StarknetProvider's methods:
+  - get_latest_mmr_block
+  - get_min_mmr_block
+  - get_mmr_state
+  - get_latest_relayed_block
+- Fixed Felt creation method (from_hex_str -> from_hex)
+- Fixed closure ownership issues with move keyword
+- Removed unused variables and imports
+- Added test dependencies in Cargo.toml
+
+The changes include:
+- Basic tests for account creation with success and error cases
+- Tests for MMR proof verification with empty proofs and hashes
+- Mock setup for provider tests using mockall
+- Fixed compiler warnings and errors
+- Improved code organization and test structure
+
+* test: add integration tests for state-proof-api
+
+- Created tests/api_tests.rs with endpoint tests
+- Moved API logic from main.rs to api.rs
+- Created lib.rs to expose public API
+- Added tests for verify-blocks endpoint, batch size, and app state
+
+* test: add unit tests for common crate
+
+- Add test_get_env_var for environment variable retrieval
+- Add test_get_var for type parsing from env vars
+- Add test_felt_conversion for Felt type conversions
+- Add test_get_or_create_db_path for database path handling
+
+* feat(client): add basic unit tests for LightClient
+
+- Added mock traits for testing dependencies (DatabaseUtils, EnvVarReader, StarknetProviderFactory)
+- Added test-only constructor new_with_deps for dependency injection
+- Added basic unit tests:
+  - Valid initialization
+  - Zero polling interval error
+  - Missing database file error
+  - Invalid chain ID error
+- Fixed visibility issues with test dependencies
+- Removed unused imports and traits
+
+* test(publisher): implement basic tests for AccumulatorBuilder
+
+- Add tests for AccumulatorBuilder constructor with valid/invalid inputs
+- Add tests for batch processing with invalid inputs
+- Add test for MMR state updates with invalid block range
+- Add test for batch result handling with proof verification skipped
+- Mock StarknetAccount for testing purposes
+
+* feat(publisher): implement unit tests for batch processor
+
+Added comprehensive unit tests for the BatchProcessor module to verify its core functionality:
+
+- Added tests for batch range calculations and bounds checking
+- Added tests for batch size validation and processor creation
+- Added tests for error cases with invalid inputs
+- Added mock implementations for ProofGenerator and MMRStateManager
+- Fixed test assertions to match actual implementation behavior
+- Added dead code annotations to suppress warnings for test-only code
+
+The tests cover:
+- calculate_batch_bounds
+- calculate_batch_range
+- calculate_start_block
+- batch processor creation
+- batch range validation
+- invalid input handling
+- getter methods
+
+This improves test coverage and verifies the batch processing logic works as expected.
+
+* test(publisher): add unit tests for MMRStateManager
+
+Added comprehensive unit tests for the MMRStateManager module:
+
+- Added test_update_state_without_guest_output to verify MMR state updates without guest output
+- Added test_update_state_with_empty_headers to verify empty headers handling
+- Added test_append_headers_with_empty_hash to verify empty hash validation
+- Added test_create_new_state to verify state creation
+- Added setup_test helper function with proper test dependencies
+- Fixed SQLite table creation for tests
+- Added debug logging for better test diagnostics
+
+The tests cover:
+- MMR state updates
+- Header validation
+- Empty input handling
+- State creation
+- Database setup
+
+* test(publisher): improve hex validation tests
+
+- Added comprehensive tests for U256 hex validation
+- Fixed error handling consistency in validate_u256_hex
+- Added test cases for:
+  - Valid hex strings with 0x prefix
+  - Invalid hex strings without prefix
+  - Empty strings
+  - Strings exceeding max length
+  - Non-hex characters
+- Ensured consistent InvalidU256Hex error type
+- Added error message validation test
+- Improved code documentation
+
+The validation now properly handles all edge cases and returns
+consistent error types for better error handling downstream.
+
+* refactor(guest-types): remove risc0 Receipt test
+
+- Removed test_batch_proof test that required complex mocking of risc0_zkvm::Receipt
+- This test was providing minimal value as it only tested a simple getter
+- Other tests in the module provide better coverage of core functionality
+- Reduces dependency coupling with risc0_zkvm internals
+
+* test(publisher): fix proof generator tests
+
+- Fixed test_generate_stark_proof_invalid_input and test_generate_groth16_proof_invalid_input
+- Added proper type parameters and constructor arguments for ProofGenerator
+- Used Vec<u8> as test input type to test empty input cases
+- Removed redundant whitespace
+- Tests now properly verify error handling for invalid inputs
+
+The tests now correctly verify that the proof generator rejects empty inputs
+while maintaining the original test intent.
+
+* test(ipfs-utils): add comprehensive test suite
+
+Added tests for IPFS utilities:
+- Added TestIpfsApi trait for mocking IPFS operations
+- Added MockIpfsClient with in-memory storage
+- Added TestIpfsManager for test isolation
+- Added test_upload_and_fetch to verify file operations
+- Added test_connection_check for connectivity testing
+- Added proper error handling and assertions
+- Improved test readability with clear setup/verify phases
+
+The test suite provides good coverage of core IPFS operations
+while avoiding issues with sealed traits and maintaining
+clean test architecture.
+
+* test(ipfs-utils): improve test coverage with error cases
+
+Added error handling tests for IPFS operations:
+- Added file size limit validation in TestIpfsManager
+- Added IPFS hash validation in fetch_db
+- Added test_file_size_limit for oversized files (2MB)
+- Added test_invalid_file_path for nonexistent files
+- Added test_invalid_hash for malformed IPFS hashes
+- Added test_empty_file for edge case handling
+- Removed unused stream import
+
+The test suite now covers both success and error paths,
+ensuring proper validation and error handling in the IPFS
+operations.
+
+* feat: add state-proof-api service
+
+- Add Dockerfile for state-proof-api service
+- Update build scripts to include state-proof-api image
+- Add state-proof-api service to docker-compose.services.yml
+- Configure API to run on port 3000 with batch size 4
+
+* feat(db): add hourly block header fetching
+
+- Added new get_hourly_block_headers_in_range function to fetch one block header per hour
+- Uses PostgreSQL date_trunc to group blocks by hour
+- Returns first block from each hour within the specified range
+- Maintains existing interface and return types for seamless integration
+
+* feat(state-proof-api): add detailed request logging for block verification
+
+Added INFO level logging for block verification requests that includes:
+- Starting block number
+- Ending block number
+- Total blocks in range
+
+* feat: enhance Docker configurations and add new services
+
+- Update Dockerfile.api with RISC Zero toolchain and dependencies
+  * Add build dependencies (curl, git, build-essential)
+  * Configure cargo for git CLI fetching
+  * Install and configure RISC Zero toolchain
+  * Add runtime SSL dependencies
+
+- Add state-proof-api and fetch-fees-proof services
+  * Configure state-proof-api with RISC Zero toolchain (port 3000)
+  * Set up fetch-fees-proof with API_URL configuration
+  * Include environment file handling
+
+- Update build infrastructure
+  * Add both services to build-services.sh and build-images.sh
+  * Update build commands with BINARY arg
+  * Configure docker-compose.services.yml with new services
+  * Set up service dependencies and networking
+
+Both services are configured for fossil-network integration with
+appropriate environment and network settings. Build commands now use
+consistent Dockerfile.api with BINARY arguments.
+
+Co-authored-by: Claude <claude@anthropic.com>
+
+* fix: resolve PyO3 version conflicts and improve Python linking
+
+- Update PyO3 version to 0.23.3 across all dependencies
+- Add patch section for garaga_rs and PyO3 dependencies
+- Add build.rs to properly handle Python linking on macOS arm64
+- Update environment variables for Python development
+- Configure publisher crate as both cdylib and rlib
+
+Technical changes:
+- Add dynamic Python version detection in build.rs
+- Add proper linking flags for macOS
+- Set PYO3_PYTHON environment variable
+- Fix garaga_rs dependency conflicts
+
+* test(publisher): add unit tests for validator module
+
+- Added test module for ValidatorBuilder with basic test coverage
+- Added tests for validator construction, header validation, batch processing
+- Added mocks for StarknetProvider and MMR state
+- Added test cases for both success and error scenarios
+- Added #[allow(dead_code)] attributes to test-only structs
+
+* refactor(starknet-handler): improve hex validation and tests
+
+- Add input validation for hex string length and characters in u256_from_hex
+- Fix test cases to use proper 64-character hex strings
+- Replace should_panic test with proper error case testing
+- Add comprehensive test cases for MmrState and MmrSnapshot
+- Use ByteArray::from instead of from_hex for IPFS hashes
+
+* refactor: move build_mmr business logic to cli module
+
+- Move CLI argument handling and business logic from bin/build_mmr.rs to src/cli/build_mmr.rs
+- Create new cli module in src/cli/mod.rs
+- Simplify binary to only handle argument parsing and running the main function
+- Improve separation of concerns and code organization
+- Make CLI logic more testable by moving it into the library
+
+* test: add unit tests for build_mmr cli module
+
+- Add tests for CLI argument parsing and validation
+- Add test for conflicting arguments handling
+- Create test utilities for environment file setup
+- Add tempfile dependency for test environment
+- Fix test environment setup with temporary .env file
+
+* refactor(publisher): improve update_mmr module organization and testing
+
+- Extract business logic from bin/update_mmr.rs to cli/update_mmr.rs
+- Add batch_size as CLI argument with default value 1024
+- Add comprehensive test suite for Config and Args
+- Improve test reliability with proper env var handling
+- Clean up imports and code formatting
+
+* refactor(publisher): improve extract_fees module and fix tests
+
+- Align extract_fees arguments with operations.rs signature
+- Add batch_size and skip_proof_verification parameters
+- Fix environment variable handling in tests
+- Use from_env() instead of from_env_test() for consistent error handling
+
+* test(publisher): improve error handling tests
+
+- Fix test_config_invalid_chain_id to properly test parse errors
+- Fix test_config_missing_env to test missing env vars
+- Remove unnecessary error message assertions to make tests more robust
+- Clean up test environment setup and teardown
+
+* test/ fixed failing
+
+* fix: update L2_MSG_PROXY validation for Starknet address format
+
+- Change address validation to expect 66 characters (0x + 64 hex chars)
+- Update error messages to reference Starknet address format
+- Fix test_max_values to use valid Starknet address
+- Update test cases to use correct address length
+
+* fix: ensure client updates are saved to IPFS
+
+- Add IPFS hash retrieval and logging in update_mmr_with_new_headers
+- Log IPFS hash after successful batch processing
+- Ensure MMR state is properly saved during client updates
+- Add debug logging for IPFS operations
+
+This fixes an issue where client updates were not being properly saved
+to IPFS, making it difficult to verify the state transitions later.
+
+* docker images for osx
+
+* build.rs for publisher
+
+* refactor(publisher): restrict Python configuration to Apple platforms only
+
+- Move Python configuration into a separate function
+- Add cfg attribute to only run Python setup on Apple platforms
+- Keep wrapper.h invalidation check for all platforms
+- Fix GitHub Actions compilation errors on Linux
+
+---------
+
+Co-authored-by: Claude <claude@anthropic.com>",Alex Metelli,dd86c2ed4778165ce38894f4592d593035044676@gmx.com
+2025-01-10 20:32:24+00:00,robgreenlee,robgreenlee/disclosure-analyzer,bafd28db53d5c6275de6c4da4e79e64c493a2354,"feat: Add sample report functionality with SELLER'S PROPERTY DISCLOSURE STATEMENT
+
+🤖 Generated with Claude CLI.
+
+Co-Authored-By: Claude <noreply@anthropic.com>",robgreenlee,64ac97bd0928ac68476320da9ff1e2085d1afd0b@gmail.com
+2025-01-10 10:20:30+00:00,Amul-Thantharate,Amul-Thantharate/AIFusionBot,7717a543d467ed4a1a2101dd6f1124aa15eabd33,"🔒 Enhance maintenance command security and bot initialization
+
+• 🛡️ Add strict admin-only access for maintenance command
+• 🚫 Add warning logs for unauthorized access attempts
+• 💬 Improve maintenance mode notifications
+• 🔄 Fix async bot initialization and commands setup
+• 🐛 Fix print_bot_info implementation
+• 📝 Update error messages with better formatting
+
+Co-authored-by: Claude <claude@anthropic.com>",Amul-Thantharate,a33e3ab753b23da58d2168442ec77f684a78329f@gmail.com
+2025-01-07 10:01:35+00:00,lawrenciumLr103,CutNBreak/mcp_inspector,2f513df6c150b934876bd752456ab1345b2f7db9,"feat: improve request history and tab persistence
+
+- Add failed requests to history with error messages for better debugging
+- Persist selected tab in URL hash and restore on page load
+- Fix formatting of timeout parameter parsing
+
+🤖 Generated with Claude CLI.
+
+Co-Authored-By: Claude <noreply@anthropic.com>",Ben Mann,73675debcd8a436be48ec22211dcf44fe0df0a64@anthropic.com
+2025-01-05 13:47:53+00:00,truaxki,truaxki/python-sdk,dad01945c764660033befe0ab211c6c84c21de4a,"docs: Update README.md to include FastMCP
+
+Update the README.md to include FastMCP as the recommended way to build MCP servers. FastMCP is a high-level, Pythonic interface that makes it easy to build MCP servers with minimal boilerplate. The low-level implementation is still available for more control.
+
+🤖 Generated with Claude CLI.
+
+Co-Authored-By: Claude <noreply@anthropic.com>",David Soria Parra,ec7cd3d1bbe62417179174ea26502a6348f72e76@anthropic.com
+2025-01-04 12:08:12+00:00,lawrenciumLr103,CutNBreak/mcp_python-sdk,dad01945c764660033befe0ab211c6c84c21de4a,"docs: Update README.md to include FastMCP
+
+Update the README.md to include FastMCP as the recommended way to build MCP servers. FastMCP is a high-level, Pythonic interface that makes it easy to build MCP servers with minimal boilerplate. The low-level implementation is still available for more control.
+
+🤖 Generated with Claude CLI.
+
+Co-Authored-By: Claude <noreply@anthropic.com>",David Soria Parra,ec7cd3d1bbe62417179174ea26502a6348f72e76@anthropic.com
+2025-01-02 17:58:41+00:00,robgreenlee,robgreenlee/disclosure-analyzer,ef40a258dcc0f1434b22214e84efd727caff787a,"Enhanced UI with Gradients and Animations
+
+- Added subtle gradient animations to headers
+- Enhanced card hover effects with lift and glow
+- Improved visual hierarchy with gradient backgrounds
+- Added smooth transitions and animations
+
+🤖 Generated with Claude CLI.
+
+Co-Authored-By: Claude <noreply@anthropic.com>",robgreenlee,64ac97bd0928ac68476320da9ff1e2085d1afd0b@gmail.com
+2025-01-02 17:47:37+00:00,robgreenlee,robgreenlee/disclosure-analyzer,ec12b6043d6fa089a5288b8c6461731423ce24c7,"Update color scheme to match Anthropic's design
+
+- Updated color palette to use Anthropic's purple and gray tones
+- Simplified gradients and backgrounds
+- Improved contrast and readability
+
+🤖 Generated with Claude CLI.
+
+Co-Authored-By: Claude <noreply@anthropic.com>",robgreenlee,64ac97bd0928ac68476320da9ff1e2085d1afd0b@gmail.com
+2025-01-02 17:47:37+00:00,robgreenlee,robgreenlee/disclosure-analyzer,f54f567b7c838fc3fb07d41995bef08e85b511a4,"UI Updates and Performance Improvements
+
+- Updated color scheme to match Anthropic's design
+- Removed heat map visualization
+- Increased document analysis limit to 250k characters
+- Fixed SDK import issues
+- Updated styling for better readability
+
+🤖 Generated with Claude CLI.
+
+Co-Authored-By: Claude <noreply@anthropic.com>",robgreenlee,64ac97bd0928ac68476320da9ff1e2085d1afd0b@gmail.com
+2025-01-02 06:56:15+00:00,yonaka15,yonaka15/tech-jugoya-ai,419571d10994f4826d1c0ade03058a6f601ea233,"feat(blog): add Next.js 15 SEO optimization article
+
+This commit adds a new technical article about implementing SEO optimizations using Next.js 15's Metadata API and proper URL canonicalization strategies. The article covers:
+
+- Canonical URL implementation with the new Metadata API
+- URL normalization and redirect strategies
+- Comprehensive metadata management
+- Best practices based on real implementation experience
+
+Co-authored-by: Claude <claude@anthropic.com>",yonaka43,2cfbe363d942244cc9086d01952d2d12ef3e6e92@jusanz.com

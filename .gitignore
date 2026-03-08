@@ -1,6 +1,4 @@
-# Data files (exported from BigQuery, potentially large)
-data/*.csv
-data/*.json
+# Data files (large exports)
 data/*.parquet
 
 # Visualizations (generated)

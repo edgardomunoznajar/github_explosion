@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Takeover - Tracking AI-Generated Commits on GitHub</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+    background: #faf6f1;
+    color: #2d1f0e;
+    line-height: 1.6;
+  }
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+  /* Header */
+  header {
+    padding: 48px 0 32px;
+    text-align: center;
+    border-bottom: 1px solid #e0d5c7;
+  }
+  header h1 {
+    font-size: 2.8rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #c45a3c, #a0522d, #6b3a2a);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 8px;
+  }
+  header p {
+    color: #7a6652;
+    font-size: 1rem;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* Stats cards */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    padding: 32px 0;
+  }
+  .stat-card {
+    background: #fff;
+    border: 1px solid #e0d5c7;
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+  }
+  .stat-card .number {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #b5451b;
+  }
+  .stat-card .label {
+    font-size: 0.85rem;
+    color: #7a6652;
+    margin-top: 4px;
+  }
+  .stat-card .change {
+    font-size: 0.85rem;
+    color: #5a8a3c;
+    margin-top: 4px;
+  }
+  .stat-card .change.negative { color: #c45a3c; }
+
+  /* Chart sections */
+  .chart-section {
+    background: #fff;
+    border: 1px solid #e0d5c7;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+  .chart-section h2 {
+    font-size: 1.1rem;
+    color: #6b3a2a;
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+  .chart-container {
+    position: relative;
+    height: 350px;
+  }
+
+  /* Two-column layout */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  @media (max-width: 768px) {
+    .grid-2 { grid-template-columns: 1fr; }
+    header h1 { font-size: 2rem; }
+  }
+
+  /* Top repos table */
+  .repo-table { width: 100%; border-collapse: collapse; }
+  .repo-table th {
+    text-align: left;
+    color: #7a6652;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 8px 0;
+    border-bottom: 1px solid #e0d5c7;
+  }
+  .repo-table td {
+    padding: 10px 0;
+    border-bottom: 1px solid #f0e8dd;
+    font-size: 0.9rem;
+  }
+  .repo-table td:first-child { color: #b5451b; }
+  .repo-table td:last-child { text-align: right; color: #7a6652; }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    padding: 32px 0;
+    color: #9a8b7a;
+    font-size: 0.8rem;
+    border-top: 1px solid #e0d5c7;
+    margin-top: 24px;
+  }
+  footer a { color: #b5451b; text-decoration: none; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>aitakeover.dev</h1>
+    <p>Tracking AI-generated commits across all public GitHub repos. Updated monthly from GH Archive via BigQuery.</p>
+  </header>
+
+  <div class="stats">
+    <div class="stat-card">
+      <div class="number" id="total-commits">--</div>
+      <div class="label">AI-Attributed Commits</div>
+      <div class="change" id="commits-change"></div>
+    </div>
+    <div class="stat-card">
+      <div class="number" id="total-repos">--</div>
+      <div class="label">Repos with AI Commits</div>
+      <div class="change" id="repos-change"></div>
+    </div>
+    <div class="stat-card">
+      <div class="number" id="total-devs">--</div>
+      <div class="label">Developers Using AI</div>
+      <div class="change" id="devs-change"></div>
+    </div>
+    <div class="stat-card">
+      <div class="number" id="ai-share">--</div>
+      <div class="label">AI Share of Pushes</div>
+      <div class="change" id="share-change"></div>
+    </div>
+  </div>
+
+  <div class="chart-section">
+    <h2>AI-Attributed Commits per Month</h2>
+    <div class="chart-container">
+      <canvas id="timeseriesChart"></canvas>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="chart-section">
+      <h2>Commits by AI Tool</h2>
+      <div class="chart-container">
+        <canvas id="toolChart"></canvas>
+      </div>
+    </div>
+    <div class="chart-section">
+      <h2>AI Share of Total Push Events</h2>
+      <div class="chart-container">
+        <canvas id="shareChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="chart-section">
+    <h2>Cumulative AI-Attributed Commits (Jan - Oct 2025)</h2>
+    <table class="repo-table" id="toolTable">
+      <thead>
+        <tr><th>Tool</th><th>Total Commits</th><th>Peak Month Repos</th><th style="text-align:right">Peak Month Devs</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <footer>
+    Data sourced from <a href="https://www.gharchive.org/">GH Archive</a> via Google BigQuery.
+    Detection: Co-Authored-By trailers, commit body markers, author emails.
+    <br>Currently tracking: Claude Code. Aider, Devin, and others coming soon.
+  </footer>
+</div>
+
+<script>
+// ── Real data from BigQuery (GH Archive, queried 2026-03-08) ──────────
+const LABELS = ['2025-01','2025-02','2025-03','2025-04','2025-05','2025-06','2025-07','2025-08','2025-09','2025-10'];
+
+const TOOLS = {
+  claude:      [24, 2139, 23273, 21703, 43017, 224256, 440682, 557127, 486418, 170227],
+  devin:       [2093, 2294, 3609, 3404, 6227, 3435, 4518, 5006, 2320, 615],
+  aider:       [205, 399, 347, 289, 278, 986, 7894, 6737, 5130, 1381],
+  openai_codex:[374, 234, 254, 1474, 852, 558, 1037, 1669, 1465, 322],
+};
+
+const TOTAL_PUSHES = {
+  '2025-01': 103372732, '2025-02': 97934289, '2025-03': 109910258,
+  '2025-04': 103264033, '2025-05': 94987478, '2025-06': 66832515,
+  '2025-07': 71516129,  '2025-08': 71718183, '2025-09': 71478121,
+  '2025-10': 61226053,
+};
+
+// Derived totals per month (all tools combined)
+const allCommits = LABELS.map((_, i) =>
+  TOOLS.claude[i] + TOOLS.devin[i] + TOOLS.aider[i] + TOOLS.openai_codex[i]
+);
+
+// AI share as percentage of total pushes
+const aiSharePct = LABELS.map((label, i) =>
+  (allCommits[i] / TOTAL_PUSHES[label]) * 100
+);
+
+// Distinct repos/devs — use Claude's numbers as proxy (dominant tool)
+const REPOS =  [12, 421, 2612, 2183, 4842, 21457, 40349, 54291, 50823, 21182];
+const DEVS  =  [11, 376, 2031, 1727, 3516, 14539, 27349, 36692, 35671, 16630];
+
+// ── Chart defaults ────────────────────────────────────────────────────
+Chart.defaults.color = '#7a6652';
+Chart.defaults.borderColor = '#e0d5c7';
+Chart.defaults.font.family = "'SF Mono', 'Fira Code', monospace";
+Chart.defaults.font.size = 11;
+
+function fmt(n) {
+  if (n >= 1e6) return (n / 1e6).toFixed(1) + 'M';
+  if (n >= 1e3) return (n / 1e3).toFixed(n >= 1e4 ? 0 : 1) + 'K';
+  return n.toString();
+}
+
+// ── Populate stat cards ───────────────────────────────────────────────
+const latest = allCommits.length - 1;
+const prev = latest - 1;
+const totalAllTime = allCommits.reduce((a, b) => a + b, 0);
+
+document.getElementById('total-commits').textContent = fmt(totalAllTime);
+document.getElementById('total-repos').textContent = fmt(REPOS[latest]);
+document.getElementById('total-devs').textContent = fmt(DEVS[latest]);
+document.getElementById('ai-share').textContent = aiSharePct[latest].toFixed(2) + '%';
+
+function momChange(arr) {
+  const change = ((arr[latest] - arr[prev]) / arr[prev] * 100).toFixed(0);
+  const sign = change >= 0 ? '+' : '';
+  return sign + change + '% MoM';
+}
+document.getElementById('commits-change').textContent = fmt(totalAllTime) + ' total (Jan-Oct 2025)';
+document.getElementById('repos-change').textContent = momChange(REPOS);
+document.getElementById('devs-change').textContent = momChange(DEVS);
+
+const shareEl = document.getElementById('share-change');
+shareEl.textContent = momChange(aiSharePct);
+if (aiSharePct[latest] < aiSharePct[prev]) {
+  shareEl.classList.add('negative');
+}
+
+// ── Timeseries chart (all AI commits) ─────────────────────────────────
+new Chart(document.getElementById('timeseriesChart'), {
+  type: 'line',
+  data: {
+    labels: LABELS,
+    datasets: [{
+      label: 'All AI Commits',
+      data: allCommits,
+      borderColor: '#b5451b',
+      backgroundColor: 'rgba(181,69,27,0.1)',
+      fill: true,
+      tension: 0.3,
+      pointRadius: 4,
+      pointHoverRadius: 7,
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => fmt(ctx.parsed.y) + ' commits' } }
+    },
+    scales: {
+      y: {
+        grid: { color: '#f0e8dd' },
+        ticks: { callback: v => fmt(v) },
+      },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// ── Tool breakdown (stacked area) ─────────────────────────────────────
+new Chart(document.getElementById('toolChart'), {
+  type: 'line',
+  data: {
+    labels: LABELS,
+    datasets: [
+      { label: 'Claude', data: TOOLS.claude, borderColor: '#b5451b', backgroundColor: 'rgba(181,69,27,0.35)', fill: true, tension: 0.3, pointRadius: 0 },
+      { label: 'Devin', data: TOOLS.devin, borderColor: '#6b3a2a', backgroundColor: 'rgba(107,58,42,0.35)', fill: true, tension: 0.3, pointRadius: 0 },
+      { label: 'Aider', data: TOOLS.aider, borderColor: '#c9956b', backgroundColor: 'rgba(201,149,107,0.35)', fill: true, tension: 0.3, pointRadius: 0 },
+      { label: 'OpenAI Codex', data: TOOLS.openai_codex, borderColor: '#9a8b7a', backgroundColor: 'rgba(154,139,122,0.25)', fill: true, tension: 0.3, pointRadius: 0 },
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'bottom', labels: { boxWidth: 12, padding: 16 } },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + fmt(ctx.parsed.y) } }
+    },
+    scales: {
+      y: { stacked: true, grid: { color: '#f0e8dd' }, ticks: { callback: v => fmt(v) } },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// ── AI share chart ────────────────────────────────────────────────────
+new Chart(document.getElementById('shareChart'), {
+  type: 'line',
+  data: {
+    labels: LABELS,
+    datasets: [{
+      label: 'AI Share %',
+      data: aiSharePct,
+      borderColor: '#5a8a3c',
+      backgroundColor: 'rgba(90,138,60,0.1)',
+      fill: true,
+      tension: 0.3,
+      pointRadius: 4,
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.parsed.y.toFixed(3) + '%' } }
+    },
+    scales: {
+      y: { grid: { color: '#f0e8dd' }, ticks: { callback: v => v.toFixed(1) + '%' } },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// ── Summary table ─────────────────────────────────────────────────────
+const toolSummary = [
+  { name: 'Claude Code', total: TOOLS.claude.reduce((a,b) => a+b, 0), peakRepos: 54291, peakDevs: 36692 },
+  { name: 'Devin', total: TOOLS.devin.reduce((a,b) => a+b, 0), peakRepos: 717, peakDevs: 573 },
+  { name: 'Aider', total: TOOLS.aider.reduce((a,b) => a+b, 0), peakRepos: 659, peakDevs: 513 },
+  { name: 'OpenAI Codex CLI', total: TOOLS.openai_codex.reduce((a,b) => a+b, 0), peakRepos: 460, peakDevs: 407 },
+];
+const tbody = document.querySelector('#toolTable tbody');
+toolSummary.forEach(t => {
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td>${t.name}</td><td>${fmt(t.total)}</td><td>${fmt(t.peakRepos)}</td><td>${fmt(t.peakDevs)}</td>`;
+  tbody.appendChild(tr);
+});
+</script>
+
+</body>
+</html>
