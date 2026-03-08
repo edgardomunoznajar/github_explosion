@@ -160,7 +160,7 @@
   </div>
 
   <div class="chart-section">
-    <h2>AI-Attributed Commits per Month</h2>
+    <h2>AI-Attributed Commits per Month <span style="font-size:0.75rem;color:#9a8b7a;font-weight:400">(Oct 2025 = incomplete GH Archive data)</span></h2>
     <div class="chart-container">
       <canvas id="timeseriesChart"></canvas>
     </div>
@@ -182,7 +182,39 @@
   </div>
 
   <div class="chart-section">
-    <h2>Cumulative AI-Attributed Commits (Jan - Oct 2025)</h2>
+    <h2>Model Fit: Exponential vs Logistic vs Gompertz <span style="font-size:0.75rem;color:#9a8b7a;font-weight:400">(+ 6-month projection)</span></h2>
+    <div class="chart-container" style="height:420px;">
+      <canvas id="fitChart"></canvas>
+    </div>
+    <div style="margin-top:12px; display:flex; gap:24px; flex-wrap:wrap; font-size:0.8rem; color:#5a4a3a;">
+      <div><strong>Exponential</strong> y = a&middot;e<sup>bt</sup> &mdash; R²=0.989, AIC=314.7</div>
+      <div><strong>Logistic</strong> y = L/(1+e<sup>-k(t-t₀)</sup>) &mdash; R²=0.989, AIC=316.7, ceiling hit upper bound</div>
+      <div><strong>Gompertz</strong> y = L&middot;e<sup>-e<sup>-k(t-t₀)</sup></sup> &mdash; R²=0.981, AIC=323.8, ceiling ~641M</div>
+    </div>
+    <p style="margin-top:8px; font-size:0.8rem; color:#7a6652;">
+      Best fit by AIC: <strong>Exponential</strong>. The logistic ceiling converged to the upper bound (~1B), meaning the data does not yet show saturation.
+      With only 14 months of observations and a data quality gap at month 10, we cannot distinguish exponential from early-stage logistic.
+      This does not predict indefinite exponential growth &mdash; it means the inflection point has not yet been observed.
+    </p>
+  </div>
+
+  <div class="grid-2">
+    <div class="chart-section">
+      <h2>Growth Rate (MoM %)</h2>
+      <div class="chart-container">
+        <canvas id="growthChart"></canvas>
+      </div>
+    </div>
+    <div class="chart-section">
+      <h2>Acceleration (Change in Growth Rate)</h2>
+      <div class="chart-container">
+        <canvas id="accelChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="chart-section">
+    <h2>Cumulative AI-Attributed Commits (Jan 2025 - Mar 2026)</h2>
     <table class="repo-table" id="toolTable">
       <thead>
         <tr><th>Tool</th><th>Total Commits</th><th>Peak Month Repos</th><th style="text-align:right">Peak Month Devs</th></tr>
@@ -191,30 +223,75 @@
     </table>
   </div>
 
+  <div class="chart-section" style="margin-top: 24px;">
+    <h2>Methodology &amp; Data Notes</h2>
+    <div style="font-size: 0.85rem; color: #5a4a3a; line-height: 1.8;">
+      <p><strong>Data sources</strong></p>
+      <ul style="margin: 4px 0 12px 20px;">
+        <li><strong>Jan - Oct 2025:</strong> <a href="https://www.gharchive.org/" style="color:#b5451b">GH Archive</a> via Google BigQuery. Exact commit-level counts from PushEvent payloads.</li>
+        <li><strong>Nov 2025 - Feb 2026:</strong> GitHub Search API (approximate). GH Archive stopped including commit message payloads in Nov 2025, reducing table size from ~400 GB/month to ~89 GB. We fall back to GitHub's commit search endpoint, which returns total_count estimates that may differ from exact counts.</li>
+        <li><strong>Mar 2026*:</strong> Forecast. 1,723,910 commits observed in 8 days (Mar 1-8), linearly extrapolated to 31 days.</li>
+      </ul>
+      <p><strong>Detection signals</strong></p>
+      <ul style="margin: 4px 0 12px 20px;">
+        <li><strong>Claude Code:</strong> <code>Co-Authored-By: Claude ... @anthropic.com</code> trailers, <code>Generated with [Claude Code]</code> body markers, <code>noreply@anthropic.com</code> author email.</li>
+        <li><strong>Aider:</strong> <code>aider:</code> prefix in commit messages, <code>Co-Authored-By: aider</code> trailers.</li>
+        <li><strong>OpenAI Codex CLI:</strong> <code>Co-Authored-By: ... @openai.com</code>, <code>noreply@openai.com</code> author email.</li>
+        <li><strong>Devin:</strong> Jan-Oct: <code>devin-ai-integration</code> actor/author in BigQuery. Nov+: <code>co-authored-by devin-ai</code> via GitHub Search API (author-based search returned 0; co-author trailer search works). Detection method differs between periods.</li>
+      </ul>
+      <p><strong>Known limitations</strong></p>
+      <ul style="margin: 4px 0 12px 20px;">
+        <li><strong>Oct 2025:</strong> GH Archive data appears incomplete for this month (61M push events vs ~71M in adjacent months). Commits counts are artificially low. This month is excluded from growth rate and acceleration calculations.</li>
+        <li><strong>Nov 2025 growth rate:</strong> Since Oct is excluded, Nov's MoM growth is estimated as the average monthly growth from Sep to Nov (two-month span halved).</li>
+        <li><strong>Growth rate charts start at Apr 2025:</strong> The first 3 months (Jan-Mar) have extreme MoM percentages (e.g., 8,800% Jan to Feb) due to near-zero base counts. These are excluded from the growth rate and acceleration charts to keep the scale readable.</li>
+        <li><strong>GitHub Copilot and Cursor</strong> do not leave commit-level attribution markers, so they are invisible to this methodology. The numbers here represent a lower bound of AI-assisted coding.</li>
+        <li><strong>Only public repos</strong> are tracked. Private repo AI usage is not measurable via GH Archive or the Search API.</li>
+      </ul>
+      <p><strong>Model fitting</strong></p>
+      <ul style="margin: 4px 0 12px 20px;">
+        <li>Three models fitted to Claude commit counts using <code>scipy.optimize.curve_fit</code> (nonlinear least squares): <strong>Exponential</strong> (2 params), <strong>Logistic</strong> (3 params), <strong>Gompertz</strong> (3 params).</li>
+        <li><strong>Oct 2025 excluded</strong> from fitting due to incomplete data. 13 data points used.</li>
+        <li>Model comparison via AIC (Akaike Information Criterion): lower = better fit with parsimony penalty for extra parameters.</li>
+        <li><strong>Exponential wins</strong> (AIC=314.7 vs 316.7 logistic, 323.8 Gompertz). The logistic ceiling parameter converged to its upper bound (~1B), meaning the optimizer found no evidence of saturation in the data. Effectively, the logistic degenerates to an exponential with an extra unused parameter.</li>
+        <li>This does <strong>not</strong> predict indefinite exponential growth. It means the inflection point of the S-curve has not yet been observed with 14 months of data. More data points are needed to distinguish the models.</li>
+        <li>Projections beyond Feb 2026 are extrapolations and should be treated with appropriate skepticism. The exponential projects 104M commits/month by Aug 2026; the Gompertz projects 40M. The true value likely falls between them.</li>
+      </ul>
+    </div>
+  </div>
+
   <footer>
-    Data sourced from <a href="https://www.gharchive.org/">GH Archive</a> via Google BigQuery.
-    Detection: Co-Authored-By trailers, commit body markers, author emails.
-    <br>Currently tracking: Claude Code. Aider, Devin, and others coming soon.
+    Last updated: 2026-03-08. Source code on <a href="https://github.com/edgardomunoznajar/github_explosion" style="color:#b5451b">GitHub</a>.
   </footer>
 </div>
 
 <script>
-// ── Real data from BigQuery (GH Archive, queried 2026-03-08) ──────────
-const LABELS = ['2025-01','2025-02','2025-03','2025-04','2025-05','2025-06','2025-07','2025-08','2025-09','2025-10'];
+// ── Real data from BigQuery + GitHub Search API (queried 2026-03-08) ──
+// Jan-Oct 2025: BigQuery (GH Archive, exact counts)
+// Nov 2025+: GitHub Search API (approximate, GH Archive stopped including commit payloads)
+const LABELS = ['2025-01','2025-02','2025-03','2025-04','2025-05','2025-06','2025-07','2025-08','2025-09','2025-10','2025-11','2025-12','2026-01','2026-02','2026-03*'];
+
+// March 2026: 1,723,910 in 8 days, extrapolated to full month
+const MAR_PARTIAL = 1723910;
+const MAR_DAYS = 8;
+const MAR_FORECAST = Math.round(MAR_PARTIAL / MAR_DAYS * 31);
 
 const TOOLS = {
-  claude:      [24, 2139, 23273, 21703, 43017, 224256, 440682, 557127, 486418, 170227],
-  devin:       [2093, 2294, 3609, 3404, 6227, 3435, 4518, 5006, 2320, 615],
-  aider:       [205, 399, 347, 289, 278, 986, 7894, 6737, 5130, 1381],
-  openai_codex:[374, 234, 254, 1474, 852, 558, 1037, 1669, 1465, 322],
+  claude:      [24, 2139, 23273, 21703, 43017, 224256, 440682, 557127, 486418, 170227, 1167145, 1553216, 3145469, 5187311, MAR_FORECAST],
+  devin:       [2093, 2294, 3609, 3404, 6227, 3435, 4518, 5006, 2320, 615, 3430, 5983, 7034, 3978, Math.round(1436/MAR_DAYS*31)],
+  aider:       [205, 399, 347, 289, 278, 986, 7894, 6737, 5130, 1381, 9350, 6484, 5901, 6422, Math.round(1993/MAR_DAYS*31)],
+  openai_codex:[374, 234, 254, 1474, 852, 558, 1037, 1669, 1465, 322, 3294, 1555, 4256, 7119, Math.round(3293/MAR_DAYS*31)],
 };
 
 const TOTAL_PUSHES = {
   '2025-01': 103372732, '2025-02': 97934289, '2025-03': 109910258,
   '2025-04': 103264033, '2025-05': 94987478, '2025-06': 66832515,
   '2025-07': 71516129,  '2025-08': 71718183, '2025-09': 71478121,
-  '2025-10': 61226053,
+  '2025-10': 61226053,  '2025-11': 75069424, '2025-12': 75625427,
+  '2026-01': 74652688,  '2026-02': 65997599, '2026-03*': 70000000, // estimated
 };
+
+// Data source boundary marker
+const BIGQUERY_CUTOFF = 9; // index of last BigQuery month (2025-10)
 
 // Derived totals per month (all tools combined)
 const allCommits = LABELS.map((_, i) =>
@@ -226,9 +303,9 @@ const aiSharePct = LABELS.map((label, i) =>
   (allCommits[i] / TOTAL_PUSHES[label]) * 100
 );
 
-// Distinct repos/devs — use Claude's numbers as proxy (dominant tool)
-const REPOS =  [12, 421, 2612, 2183, 4842, 21457, 40349, 54291, 50823, 21182];
-const DEVS  =  [11, 376, 2031, 1727, 3516, 14539, 27349, 36692, 35671, 16630];
+// Distinct repos/devs — BigQuery data for Jan-Oct, not available from Search API for Nov+
+const REPOS =  [12, 421, 2612, 2183, 4842, 21457, 40349, 54291, 50823, 21182, null, null, null, null];
+const DEVS  =  [11, 376, 2031, 1727, 3516, 14539, 27349, 36692, 35671, 16630, null, null, null, null];
 
 // ── Chart defaults ────────────────────────────────────────────────────
 Chart.defaults.color = '#7a6652';
@@ -246,26 +323,24 @@ function fmt(n) {
 const latest = allCommits.length - 1;
 const prev = latest - 1;
 const totalAllTime = allCommits.reduce((a, b) => a + b, 0);
+const lastBqIdx = BIGQUERY_CUTOFF; // last month with repo/dev data
 
 document.getElementById('total-commits').textContent = fmt(totalAllTime);
-document.getElementById('total-repos').textContent = fmt(REPOS[latest]);
-document.getElementById('total-devs').textContent = fmt(DEVS[latest]);
-document.getElementById('ai-share').textContent = aiSharePct[latest].toFixed(2) + '%';
+document.getElementById('total-repos').textContent = fmt(54291); // peak from BigQuery (Aug 2025)
+document.getElementById('total-devs').textContent = fmt(36692);  // peak from BigQuery (Aug 2025)
+document.getElementById('ai-share').textContent = aiSharePct[latest].toFixed(1) + '%';
 
 function momChange(arr) {
   const change = ((arr[latest] - arr[prev]) / arr[prev] * 100).toFixed(0);
   const sign = change >= 0 ? '+' : '';
   return sign + change + '% MoM';
 }
-document.getElementById('commits-change').textContent = fmt(totalAllTime) + ' total (Jan-Oct 2025)';
-document.getElementById('repos-change').textContent = momChange(REPOS);
-document.getElementById('devs-change').textContent = momChange(DEVS);
+document.getElementById('commits-change').textContent = momChange(allCommits);
+document.getElementById('repos-change').textContent = 'peak (Aug 2025)';
+document.getElementById('devs-change').textContent = 'peak (Aug 2025)';
 
 const shareEl = document.getElementById('share-change');
 shareEl.textContent = momChange(aiSharePct);
-if (aiSharePct[latest] < aiSharePct[prev]) {
-  shareEl.classList.add('negative');
-}
 
 // ── Timeseries chart (all AI commits) ─────────────────────────────────
 new Chart(document.getElementById('timeseriesChart'), {
@@ -326,6 +401,97 @@ new Chart(document.getElementById('toolChart'), {
   }
 });
 
+// ── Model fit chart ───────────────────────────────────────────────────
+const PROJ_LABELS = ['2025-01','2025-02','2025-03','2025-04','2025-05','2025-06','2025-07','2025-08','2025-09','2025-10','2025-11','2025-12','2026-01','2026-02','2026-03','2026-04','2026-05','2026-06','2026-07','2026-08'];
+
+// Fitted values from scipy.optimize.curve_fit (see analysis/fit_models.py)
+const FIT_EXP =      [7506, 12401, 20489, 33851, 55928, 92402, 152665, 252229, 416726, 688505, 1137530, 1879400, 3105099, 5130169, 8475940, 14003740, 23136638, 38225789, 63155715, 104344332];
+const FIT_LOGISTIC = [7400, 12244, 20259, 33521, 55463, 91766, 151829, 251193, 415558, 687401, 1136871, 1879683, 3106326, 5129337, 8458667, 13918751, 22822206, 37206073, 60097937, 95674898];
+const FIT_GOMPERTZ = [62, 261, 960, 3147, 9290, 24918, 61241, 138995, 293383, 579616, 1078106, 1898086, 3178468, 5085023, 7803638, 11530031, 16457034, 22760915, 30588386, 40045751];
+
+// Actual data padded with nulls for projection months
+const actualPadded = [...TOOLS.claude, null, null, null, null, null, null];
+
+new Chart(document.getElementById('fitChart'), {
+  type: 'line',
+  data: {
+    labels: PROJ_LABELS,
+    datasets: [
+      {
+        label: 'Actual (Claude)',
+        data: actualPadded,
+        borderColor: '#2d1f0e',
+        backgroundColor: 'rgba(45,31,14,0.15)',
+        fill: false,
+        tension: 0,
+        pointRadius: 5,
+        pointStyle: 'circle',
+        borderWidth: 2,
+        spanGaps: false,
+      },
+      {
+        label: 'Exponential fit (R²=0.989)',
+        data: FIT_EXP,
+        borderColor: '#b5451b',
+        borderDash: [6, 3],
+        fill: false,
+        tension: 0.3,
+        pointRadius: 0,
+        borderWidth: 2,
+      },
+      {
+        label: 'Logistic fit (R²=0.989)',
+        data: FIT_LOGISTIC,
+        borderColor: '#5a8a3c',
+        borderDash: [6, 3],
+        fill: false,
+        tension: 0.3,
+        pointRadius: 0,
+        borderWidth: 2,
+      },
+      {
+        label: 'Gompertz fit (R²=0.981)',
+        data: FIT_GOMPERTZ,
+        borderColor: '#c9956b',
+        borderDash: [6, 3],
+        fill: false,
+        tension: 0.3,
+        pointRadius: 0,
+        borderWidth: 2,
+      },
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'bottom', labels: { boxWidth: 12, padding: 16 } },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label.split(' (')[0] + ': ' + fmt(ctx.parsed.y) } },
+      annotation: {
+        annotations: {
+          projLine: {
+            type: 'line',
+            xMin: 14, xMax: 14,
+            borderColor: '#9a8b7a',
+            borderDash: [3, 3],
+            borderWidth: 1,
+            label: { content: 'Projection', display: true, position: 'start', color: '#9a8b7a', font: { size: 10 } }
+          }
+        }
+      }
+    },
+    scales: {
+      y: {
+        type: 'logarithmic',
+        grid: { color: '#f0e8dd' },
+        ticks: { callback: v => fmt(v) },
+        title: { display: true, text: 'commits/month (log scale)', color: '#7a6652' },
+      },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
 // ── AI share chart ────────────────────────────────────────────────────
 new Chart(document.getElementById('shareChart'), {
   type: 'line',
@@ -355,17 +521,118 @@ new Chart(document.getElementById('shareChart'), {
   }
 });
 
+// ── Growth rate (1st derivative) & Acceleration (2nd derivative) ──────
+// Use clean Claude data: skip Jan (seed month) and exclude Oct (incomplete GH Archive)
+// Index 9 = Oct 2025 is bad data, so we null it out and interpolate around it
+const claudeClean = TOOLS.claude.map((v, i) => i === 9 ? null : v);
+
+// Growth rate: MoM % change, skipping gaps
+const growthRate = claudeClean.map((v, i) => {
+  if (i === 0 || v === null || claudeClean[i-1] === null) return null;
+  return ((v - claudeClean[i-1]) / claudeClean[i-1]) * 100;
+});
+
+// For display: skip first 3 months (outlier %s from tiny base) and Oct
+const CLEAN_START = 3; // start from Apr 2025
+const cleanLabels = [];
+const cleanGrowth = [];
+const cleanAccel = [];
+
+for (let i = CLEAN_START; i < LABELS.length; i++) {
+  if (i === 9) continue; // skip Oct (incomplete)
+  if (i === 10 && growthRate[i] !== null) {
+    // Nov: calculate growth from Sep instead of Oct
+    const sepVal = TOOLS.claude[8]; // Sep
+    const novVal = TOOLS.claude[10]; // Nov
+    const twoMonthGrowth = ((novVal - sepVal) / sepVal) * 100;
+    cleanLabels.push(LABELS[i]);
+    cleanGrowth.push(Math.round(twoMonthGrowth / 2)); // avg per month
+    continue;
+  }
+  cleanLabels.push(LABELS[i]);
+  cleanGrowth.push(growthRate[i]);
+}
+
+// Acceleration from clean growth data
+for (let i = 0; i < cleanGrowth.length; i++) {
+  if (i === 0 || cleanGrowth[i] === null || cleanGrowth[i-1] === null) {
+    cleanAccel.push(null);
+  } else {
+    cleanAccel.push(cleanGrowth[i] - cleanGrowth[i-1]);
+  }
+}
+
+new Chart(document.getElementById('growthChart'), {
+  type: 'bar',
+  data: {
+    labels: cleanLabels,
+    datasets: [{
+      label: 'MoM Growth %',
+      data: cleanGrowth,
+      backgroundColor: cleanGrowth.map(v => v === null ? 'transparent' : v >= 0 ? 'rgba(181,69,27,0.6)' : 'rgba(154,139,122,0.6)'),
+      borderColor: cleanGrowth.map(v => v === null ? 'transparent' : v >= 0 ? '#b5451b' : '#9a8b7a'),
+      borderWidth: 1,
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => {
+        if (ctx.parsed.y === null) return 'N/A';
+        return (ctx.parsed.y >= 0 ? '+' : '') + ctx.parsed.y.toFixed(0) + '% MoM';
+      }}}
+    },
+    scales: {
+      y: { grid: { color: '#f0e8dd' }, ticks: { callback: v => v + '%' } },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+new Chart(document.getElementById('accelChart'), {
+  type: 'bar',
+  data: {
+    labels: cleanLabels,
+    datasets: [{
+      label: 'Acceleration (pp)',
+      data: cleanAccel,
+      backgroundColor: cleanAccel.map(v => v === null ? 'transparent' : v >= 0 ? 'rgba(90,138,60,0.6)' : 'rgba(181,69,27,0.6)'),
+      borderColor: cleanAccel.map(v => v === null ? 'transparent' : v >= 0 ? '#5a8a3c' : '#b5451b'),
+      borderWidth: 1,
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => {
+        if (ctx.parsed.y === null) return 'N/A';
+        const dir = ctx.parsed.y >= 0 ? 'accelerating' : 'decelerating';
+        return (ctx.parsed.y >= 0 ? '+' : '') + ctx.parsed.y.toFixed(0) + ' pp (' + dir + ')';
+      }}}
+    },
+    scales: {
+      y: { grid: { color: '#f0e8dd' }, ticks: { callback: v => v + 'pp' },
+           title: { display: true, text: 'percentage points', color: '#7a6652' } },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
 // ── Summary table ─────────────────────────────────────────────────────
 const toolSummary = [
-  { name: 'Claude Code', total: TOOLS.claude.reduce((a,b) => a+b, 0), peakRepos: 54291, peakDevs: 36692 },
-  { name: 'Devin', total: TOOLS.devin.reduce((a,b) => a+b, 0), peakRepos: 717, peakDevs: 573 },
-  { name: 'Aider', total: TOOLS.aider.reduce((a,b) => a+b, 0), peakRepos: 659, peakDevs: 513 },
-  { name: 'OpenAI Codex CLI', total: TOOLS.openai_codex.reduce((a,b) => a+b, 0), peakRepos: 460, peakDevs: 407 },
+  { name: 'Claude Code', total: TOOLS.claude.reduce((a,b) => a+b, 0), peakRepos: '54.3K', peakDevs: '36.7K' },
+  { name: 'Aider', total: TOOLS.aider.reduce((a,b) => a+b, 0), peakRepos: '659', peakDevs: '513' },
+  { name: 'Devin', total: TOOLS.devin.reduce((a,b) => a+b, 0), peakRepos: '717*', peakDevs: '573*' },
+  { name: 'OpenAI Codex CLI', total: TOOLS.openai_codex.reduce((a,b) => a+b, 0), peakRepos: '460', peakDevs: '407' },
 ];
 const tbody = document.querySelector('#toolTable tbody');
 toolSummary.forEach(t => {
   const tr = document.createElement('tr');
-  tr.innerHTML = `<td>${t.name}</td><td>${fmt(t.total)}</td><td>${fmt(t.peakRepos)}</td><td>${fmt(t.peakDevs)}</td>`;
+  tr.innerHTML = `<td>${t.name}</td><td>${fmt(t.total)}</td><td>${t.peakRepos}</td><td>${t.peakDevs}</td>`;
   tbody.appendChild(tr);
 });
 </script>
