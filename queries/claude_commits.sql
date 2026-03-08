@@ -192,6 +192,8 @@ WITH ai_pushes AS (
       OR STRPOS(payload, 'openai.com') > 0
       OR STRPOS(payload, 'devin-ai') > 0
       OR STRPOS(payload, 'Codex CLI') > 0
+      OR STRPOS(payload, 'google-labs-jules') > 0
+      OR STRPOS(payload, 'gemini-code-assist') > 0
     )
 ),
 ai_commits AS (
@@ -228,6 +230,14 @@ SELECT
       OR REGEXP_CONTAINS(COALESCE(author_name, ''), r'(?i)devin-ai')
       OR REGEXP_CONTAINS(COALESCE(author_email, ''), r'(?i)devin-ai')
       THEN 'devin'
+    -- Jules (Google)
+    WHEN login = 'google-labs-jules[bot]'
+      OR REGEXP_CONTAINS(COALESCE(author_email, ''), r'google-labs-jules')
+      THEN 'jules'
+    -- Gemini Code Assist
+    WHEN REGEXP_CONTAINS(message, r'(?i)co-authored-by:\s*gemini-code-assist')
+      OR REGEXP_CONTAINS(COALESCE(author_email, ''), r'gemini-code-assist')
+      THEN 'gemini_assist'
     ELSE NULL
   END AS tool,
   COUNT(*) AS commits,
@@ -247,6 +257,10 @@ WHERE
   OR login = 'devin-ai-integration'
   OR REGEXP_CONTAINS(COALESCE(author_name, ''), r'(?i)devin-ai')
   OR REGEXP_CONTAINS(COALESCE(author_email, ''), r'(?i)devin-ai')
+  OR login = 'google-labs-jules[bot]'
+  OR REGEXP_CONTAINS(COALESCE(author_email, ''), r'google-labs-jules')
+  OR REGEXP_CONTAINS(message, r'(?i)co-authored-by:\s*gemini-code-assist')
+  OR REGEXP_CONTAINS(COALESCE(author_email, ''), r'gemini-code-assist')
 GROUP BY year, month, tool
 HAVING tool IS NOT NULL
 ORDER BY year, month, commits DESC;

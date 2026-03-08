@@ -66,7 +66,7 @@
       "name": "How many AI-generated commits are on GitHub?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "As of February 2026, over 5.2 million AI-attributed commits per month are detected on public GitHub repos. Claude Code accounts for 96% of these. The true number is higher as Copilot and Cursor leave no commit-level markers."
+        "text": "As of February 2026, over 5.3 million AI-attributed commits per month are detected on public GitHub repos, spanning Claude Code, Jules, Devin, Aider, Gemini Code Assist, and OpenAI Codex CLI. The true number is higher as Copilot, Cursor, and Gemini CLI leave no commit-level markers."
       }
     },
     {
@@ -90,7 +90,7 @@
       "name": "How does botcommits.dev detect AI commits?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Detection relies on commit attribution markers: Co-Authored-By trailers (e.g., Claude @anthropic.com), author emails (noreply@anthropic.com), and commit message patterns (e.g., 'Generated with [Claude Code]'). Data comes from GH Archive via BigQuery (Jan-Oct 2025) and GitHub Search API (Nov 2025+)."
+        "text": "Detection relies on commit attribution markers: Co-Authored-By trailers (e.g., Claude @anthropic.com), author emails (noreply@anthropic.com), bot actors (google-labs-jules[bot]), and commit message patterns (e.g., 'Generated with [Claude Code]'). Data comes from GH Archive via BigQuery (Jan-Oct 2025) and GitHub Search API (Nov 2025+)."
       }
     }
   ]
@@ -290,7 +290,7 @@
       <div style="text-align:center;">
         <div style="font-size:2rem; font-weight:700; color:#9a8b7a;">?</div>
         <div style="font-size:0.85rem; color:#7a6652;">Copilot + Cursor commits (unattributed)</div>
-        <div style="font-size:0.75rem; color:#9a8b7a; margin-top:4px;">No attribution markers — invisible to this method</div>
+        <div style="font-size:0.75rem; color:#9a8b7a; margin-top:4px;">No attribution markers — invisible to this method (+ Gemini CLI)</div>
       </div>
     </div>
     <p style="margin-top:12px; font-size:0.8rem; color:#7a6652; border-top:1px solid #e0d5c7; padding-top:10px;">
@@ -298,7 +298,7 @@
       Since 81.5% of GitHub activity is private, and assuming similar AI adoption in private repos,
       the total is estimated at 5.19M &divide; 0.185 &approx; <strong>28M commits/month</strong>.
       This is speculative — enterprise adoption may be higher or lower than public repo rates.
-      Copilot and Cursor leave no commit-level attribution markers and are excluded entirely.
+      Copilot, Cursor, and Gemini CLI leave no commit-level attribution markers and are excluded entirely.
     </p>
   </div>
 
@@ -317,7 +317,7 @@
       <p style="margin-top:8px; font-size:0.8rem; color:#7a6652;">
         <strong>Denominator:</strong> total push events from BigQuery (not total commits — each push averages ~3 commits).
         <strong>Diff size adjustment:</strong> AI commits have ~2.5x larger diffs than human commits (per published research), so the <em>code volume</em> share is estimated at 2.5x the raw commit share.
-        Both lines shown. Copilot/Cursor are excluded (no attribution markers) — real AI share is higher.
+        Both lines shown. Copilot/Cursor/Gemini CLI are excluded (no attribution markers) — real AI share is higher.
       </p>
     </div>
   </div>
@@ -361,6 +361,8 @@
         <li><strong>Claude Code:</strong> <code>Co-Authored-By: Claude ... @anthropic.com</code> trailers, <code>Generated with [Claude Code]</code> body markers, <code>noreply@anthropic.com</code> author email.</li>
         <li><strong>Aider:</strong> <code>aider:</code> prefix in commit messages, <code>Co-Authored-By: aider</code> trailers.</li>
         <li><strong>OpenAI Codex CLI:</strong> <code>Co-Authored-By: ... @openai.com</code>, <code>noreply@openai.com</code> author email.</li>
+        <li><strong>Jules (Google):</strong> <code>google-labs-jules[bot]</code> actor/author. Commits authored directly by the Jules GitHub App bot account.</li>
+        <li><strong>Gemini Code Assist:</strong> <code>Co-Authored-By: gemini-code-assist[bot]</code> trailers. Only captures applied code review suggestions, not all Gemini-assisted code.</li>
         <li><strong>Devin:</strong> Jan-Oct: <code>devin-ai-integration</code> actor/author in BigQuery. Nov+: <code>co-authored-by devin-ai</code> via GitHub Search API (author-based search returned 0; co-author trailer search works). Detection method differs between periods.</li>
       </ul>
       <p><strong>Known limitations</strong></p>
@@ -368,7 +370,7 @@
         <li><strong>Oct 2025:</strong> GH Archive data appears incomplete for this month (61M push events vs ~71M in adjacent months). Commits counts are artificially low. This month is excluded from growth rate and acceleration calculations.</li>
         <li><strong>Nov 2025 growth rate:</strong> Since Oct is excluded, Nov's MoM growth is estimated as the average monthly growth from Sep to Nov (two-month span halved).</li>
         <li><strong>Growth rate charts start at Apr 2025:</strong> The first 3 months (Jan-Mar) have extreme MoM percentages (e.g., 8,800% Jan to Feb) due to near-zero base counts. These are excluded from the growth rate and acceleration charts to keep the scale readable.</li>
-        <li><strong>GitHub Copilot and Cursor</strong> do not leave commit-level attribution markers, so they are invisible to this methodology. The numbers here represent a lower bound of AI-assisted coding.</li>
+        <li><strong>GitHub Copilot, Cursor, and Gemini CLI</strong> do not leave commit-level attribution markers, so they are invisible to this methodology. The numbers here represent a lower bound of AI-assisted coding.</li>
         <li><strong>Only public repos</strong> are tracked. Private repo AI usage is not measurable via GH Archive or the Search API.</li>
       </ul>
       <p><strong>Model fitting</strong></p>
@@ -400,12 +402,15 @@ const LABELS = ['2025-01','2025-02','2025-03','2025-04','2025-05','2025-06','202
 // March 2026: 1,723,910 in 8 days, extrapolated to full month
 const MAR_PARTIAL = 1723910;
 const MAR_DAYS = 8;
+const MAR_DAYS_JULES = 9; // Jules/Gemini Assist queried on Mar 9
 const MAR_FORECAST = Math.round(MAR_PARTIAL / MAR_DAYS * 31);
 
 const TOOLS = {
   claude:      [24, 2139, 23273, 21703, 43017, 224256, 440682, 557127, 486418, 170227, 1167145, 1553216, 3145469, 5187311, MAR_FORECAST],
+  jules:       [21, 25, 126, 188, 26297, 62720, 42590, 70848, 63173, 55890, 52814, 81813, 119583, 129069, Math.round(29530/MAR_DAYS_JULES*31)],
   devin:       [2093, 2294, 3609, 3404, 6227, 3435, 4518, 5006, 2320, 615, 3430, 5983, 7034, 3978, Math.round(1436/MAR_DAYS*31)],
   aider:       [205, 399, 347, 289, 278, 986, 7894, 6737, 5130, 1381, 9350, 6484, 5901, 6422, Math.round(1993/MAR_DAYS*31)],
+  gemini_assist:[17, 10, 300, 257, 494, 2755, 8880, 14014, 12416, 12637, 11902, 10338, 11111, 8979, Math.round(1867/MAR_DAYS_JULES*31)],
   openai_codex:[374, 234, 254, 1474, 852, 558, 1037, 1669, 1465, 322, 3294, 1555, 4256, 7119, Math.round(3293/MAR_DAYS*31)],
 };
 
@@ -422,7 +427,7 @@ const BIGQUERY_CUTOFF = 9; // index of last BigQuery month (2025-10)
 
 // Derived totals per month (all tools combined)
 const allCommits = LABELS.map((_, i) =>
-  TOOLS.claude[i] + TOOLS.devin[i] + TOOLS.aider[i] + TOOLS.openai_codex[i]
+  TOOLS.claude[i] + TOOLS.jules[i] + TOOLS.devin[i] + TOOLS.aider[i] + TOOLS.gemini_assist[i] + TOOLS.openai_codex[i]
 );
 
 // AI share as percentage of total pushes
@@ -476,7 +481,9 @@ new Chart(document.getElementById('toolChart'), {
     labels: LABELS,
     datasets: [
       { label: 'Claude', data: TOOLS.claude, borderColor: '#b5451b', backgroundColor: 'rgba(181,69,27,0.35)', fill: true, tension: 0.3, pointRadius: 0 },
+      { label: 'Jules', data: TOOLS.jules, borderColor: '#1a73e8', backgroundColor: 'rgba(26,115,232,0.35)', fill: true, tension: 0.3, pointRadius: 0 },
       { label: 'Devin', data: TOOLS.devin, borderColor: '#6b3a2a', backgroundColor: 'rgba(107,58,42,0.35)', fill: true, tension: 0.3, pointRadius: 0 },
+      { label: 'Gemini Assist', data: TOOLS.gemini_assist, borderColor: '#34a853', backgroundColor: 'rgba(52,168,83,0.30)', fill: true, tension: 0.3, pointRadius: 0 },
       { label: 'Aider', data: TOOLS.aider, borderColor: '#c9956b', backgroundColor: 'rgba(201,149,107,0.35)', fill: true, tension: 0.3, pointRadius: 0 },
       { label: 'OpenAI Codex', data: TOOLS.openai_codex, borderColor: '#9a8b7a', backgroundColor: 'rgba(154,139,122,0.25)', fill: true, tension: 0.3, pointRadius: 0 },
     ]
@@ -754,6 +761,8 @@ new Chart(document.getElementById('accelChart'), {
 // ── Summary table ─────────────────────────────────────────────────────
 const toolSummary = [
   { name: 'Claude Code', total: TOOLS.claude.reduce((a,b) => a+b, 0), peakRepos: '54.3K', peakDevs: '36.7K' },
+  { name: 'Jules (Google)', total: TOOLS.jules.reduce((a,b) => a+b, 0), peakRepos: 'N/A*', peakDevs: 'N/A*' },
+  { name: 'Gemini Code Assist', total: TOOLS.gemini_assist.reduce((a,b) => a+b, 0), peakRepos: 'N/A*', peakDevs: 'N/A*' },
   { name: 'Aider', total: TOOLS.aider.reduce((a,b) => a+b, 0), peakRepos: '659', peakDevs: '513' },
   { name: 'Devin', total: TOOLS.devin.reduce((a,b) => a+b, 0), peakRepos: '717*', peakDevs: '573*' },
   { name: 'OpenAI Codex CLI', total: TOOLS.openai_codex.reduce((a,b) => a+b, 0), peakRepos: '460', peakDevs: '407' },
