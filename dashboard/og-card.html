@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1200px;
+    min-height: 100vh;
+    font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+    background: #faf6f1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 60px 80px 40px;
+    overflow: hidden;
+  }
+  /* Subtle grid background */
+  body::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(181,69,27,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(181,69,27,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+  .content { position: relative; }
+  .title {
+    font-size: 64px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #c45a3c, #a0522d, #6b3a2a);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 20px;
+  }
+  .subtitle {
+    font-size: 26px;
+    color: #5a4a3a;
+    margin-bottom: 44px;
+  }
+  .stats {
+    display: flex;
+    gap: 48px;
+  }
+  .stat .number {
+    font-size: 52px;
+    font-weight: 700;
+    color: #b5451b;
+    line-height: 1.1;
+  }
+  .stat .label {
+    font-size: 16px;
+    color: #7a6652;
+    margin-top: 6px;
+  }
+  .divider {
+    width: 1px;
+    background: #e0d5c7;
+    align-self: stretch;
+  }
+  .footer {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #9a8b7a;
+    font-size: 18px;
+    border-top: 1px solid #e0d5c7;
+    padding-top: 16px;
+  }
+  .footer .source { color: #7a6652; }
+</style>
+</head>
+<body>
+  <div class="content">
+    <div class="title">botcommits.dev</div>
+    <div class="subtitle">Every AI commit on GitHub, tracked.</div>
+    <div class="stats">
+      <div class="stat">
+        <div class="number">216,000x</div>
+        <div class="label">Claude Code growth in 13 months</div>
+      </div>
+      <div class="divider"></div>
+      <div class="stat">
+        <div class="number">5.2M</div>
+        <div class="label">AI commits/month (Feb 2026)</div>
+      </div>
+      <div class="divider"></div>
+      <div class="stat">
+        <div class="number">7.9%</div>
+        <div class="label">of all GitHub push events</div>
+      </div>
+    </div>
+  </div>
+  <div class="footer">
+    <span class="source">Data: GH Archive via BigQuery + GitHub Search API</span>
+    <span>Updated monthly</span>
+  </div>
+</body>
+</html>
