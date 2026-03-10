@@ -97,6 +97,15 @@
 }
 </script>
 
+<!-- Google Analytics — replace G-XXXXXXXXXX with your Measurement ID from analytics.google.com -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX');
+</script>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -773,6 +782,74 @@ toolSummary.forEach(t => {
   tr.innerHTML = `<td>${t.name}</td><td>${fmt(t.total)}</td><td>${t.peakRepos}</td><td>${t.peakDevs}</td>`;
   tbody.appendChild(tr);
 });
+
+// ── Engagement Analytics ──────────────────────────────────────────────
+// Tracks scroll depth, time on page, section visibility, and chart interactions.
+// Events are sent to Google Analytics (gtag) when configured.
+// To view: analytics.google.com → Reports → Engagement → Events
+(function() {
+  function sendEvent(name, params) {
+    if (typeof gtag === 'function') gtag('event', name, params);
+  }
+
+  // Track max scroll depth in 25% increments
+  var maxScroll = 0;
+  var scrollThresholds = [25, 50, 75, 100];
+  window.addEventListener('scroll', function() {
+    var scrollPct = Math.round((window.scrollY + window.innerHeight) / document.documentElement.scrollHeight * 100);
+    if (scrollPct > maxScroll) {
+      maxScroll = scrollPct;
+      for (var i = 0; i < scrollThresholds.length; i++) {
+        if (maxScroll >= scrollThresholds[i] && scrollThresholds[i] > 0) {
+          sendEvent('scroll_depth', { depth: scrollThresholds[i] + '%' });
+          scrollThresholds[i] = 0; // only fire once per threshold
+        }
+      }
+    }
+  });
+
+  // Track time on page at 30s, 60s, 120s, 300s
+  var timeThresholds = [30, 60, 120, 300];
+  var pageStart = Date.now();
+  setInterval(function() {
+    var elapsed = Math.floor((Date.now() - pageStart) / 1000);
+    for (var i = 0; i < timeThresholds.length; i++) {
+      if (elapsed >= timeThresholds[i] && timeThresholds[i] > 0) {
+        sendEvent('time_on_page', { seconds: timeThresholds[i] });
+        timeThresholds[i] = 0;
+      }
+    }
+  }, 5000);
+
+  // Track which chart sections become visible (IntersectionObserver)
+  if ('IntersectionObserver' in window) {
+    var seen = {};
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          var id = entry.target.querySelector('h2');
+          var sectionName = id ? id.textContent.substring(0, 60) : 'unknown';
+          if (!seen[sectionName]) {
+            seen[sectionName] = true;
+            sendEvent('section_view', { section: sectionName });
+          }
+        }
+      });
+    }, { threshold: 0.3 });
+
+    document.querySelectorAll('.chart-section').forEach(function(el) {
+      observer.observe(el);
+    });
+  }
+
+  // Track outbound link clicks (GitHub repo, etc.)
+  document.addEventListener('click', function(e) {
+    var link = e.target.closest('a[href^="http"]');
+    if (link && link.hostname !== window.location.hostname) {
+      sendEvent('outbound_click', { url: link.href });
+    }
+  });
+})();
 </script>
 
 </body>
