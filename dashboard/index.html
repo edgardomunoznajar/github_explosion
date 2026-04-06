@@ -397,19 +397,15 @@
 // ── Real data from BigQuery + GitHub Search API (queried 2026-04-06) ──
 // Jan-Oct 2025: BigQuery (GH Archive, exact counts)
 // Nov 2025+: GitHub Search API (approximate, GH Archive stopped including commit payloads)
-const LABELS = ['2025-01','2025-02','2025-03','2025-04','2025-05','2025-06','2025-07','2025-08','2025-09','2025-10','2025-11','2025-12','2026-01','2026-02','2026-03','2026-04*'];
-
-// April 2026: partial data (6 days), extrapolated to full month
-const APR_PARTIAL_DAYS = 6;
-const APR_DAYS_TOTAL = 30;
+const LABELS = ['2025-01','2025-02','2025-03','2025-04','2025-05','2025-06','2025-07','2025-08','2025-09','2025-10','2025-11','2025-12','2026-01','2026-02','2026-03'];
 
 const TOOLS = {
-  claude:      [24, 2139, 23273, 21703, 43017, 224256, 440682, 557127, 486418, 170227, 1167145, 1553216, 3145469, 5187311, 10192831, Math.round(1993207/APR_PARTIAL_DAYS*APR_DAYS_TOTAL)],
-  jules:       [21, 25, 126, 188, 26297, 62720, 42590, 70848, 63173, 55890, 52814, 81813, 119583, 129069, 116951, Math.round(16367/APR_PARTIAL_DAYS*APR_DAYS_TOTAL)],
-  devin:       [2093, 2294, 3609, 3404, 6227, 3435, 4518, 5006, 2320, 615, 3430, 5983, 7034, 3978, 7462, Math.round(899/APR_PARTIAL_DAYS*APR_DAYS_TOTAL)],
-  aider:       [205, 399, 347, 289, 278, 986, 7894, 6737, 5130, 1381, 9350, 6484, 5901, 6422, 7729, Math.round(1510/APR_PARTIAL_DAYS*APR_DAYS_TOTAL)],
-  gemini_assist:[17, 10, 300, 257, 494, 2755, 8880, 14014, 12416, 12637, 11902, 10338, 11111, 8979, 7888, Math.round(1197/APR_PARTIAL_DAYS*APR_DAYS_TOTAL)],
-  openai_codex:[374, 234, 254, 1474, 852, 558, 1037, 1669, 1465, 322, 3294, 1555, 4256, 7119, 24986, Math.round(2792/APR_PARTIAL_DAYS*APR_DAYS_TOTAL)],
+  claude:      [24, 2139, 23273, 21703, 43017, 224256, 440682, 557127, 486418, 170227, 1167145, 1553216, 3145469, 5187311, 10192831],
+  jules:       [21, 25, 126, 188, 26297, 62720, 42590, 70848, 63173, 55890, 52814, 81813, 119583, 129069, 116951],
+  devin:       [2093, 2294, 3609, 3404, 6227, 3435, 4518, 5006, 2320, 615, 3430, 5983, 7034, 3978, 7462],
+  aider:       [205, 399, 347, 289, 278, 986, 7894, 6737, 5130, 1381, 9350, 6484, 5901, 6422, 7729],
+  gemini_assist:[17, 10, 300, 257, 494, 2755, 8880, 14014, 12416, 12637, 11902, 10338, 11111, 8979, 7888],
+  openai_codex:[374, 234, 254, 1474, 852, 558, 1037, 1669, 1465, 322, 3294, 1555, 4256, 7119, 24986],
 };
 
 const TOTAL_PUSHES = {
@@ -418,7 +414,6 @@ const TOTAL_PUSHES = {
   '2025-07': 71516129,  '2025-08': 71718183, '2025-09': 71478121,
   '2025-10': 61226053,  '2025-11': 75069424, '2025-12': 75625427,
   '2026-01': 74652688,  '2026-02': 65997599, '2026-03': 83965677,
-  '2026-04*': Math.round(13199061/APR_PARTIAL_DAYS*APR_DAYS_TOTAL),
 };
 
 // Data source boundary marker
@@ -435,8 +430,8 @@ const aiSharePct = LABELS.map((label, i) =>
 );
 
 // Distinct repos/devs — BigQuery data for Jan-Oct, not available from Search API for Nov+
-const REPOS =  [12, 421, 2612, 2183, 4842, 21457, 40349, 54291, 50823, 21182, null, null, null, null, null, null];
-const DEVS  =  [11, 376, 2031, 1727, 3516, 14539, 27349, 36692, 35671, 16630, null, null, null, null, null, null];
+const REPOS =  [12, 421, 2612, 2183, 4842, 21457, 40349, 54291, 50823, 21182, null, null, null, null, null];
+const DEVS  =  [11, 376, 2031, 1727, 3516, 14539, 27349, 36692, 35671, 16630, null, null, null, null, null];
 
 // ── Chart defaults ────────────────────────────────────────────────────
 Chart.defaults.color = '#7a6652';
@@ -510,7 +505,7 @@ const FIT_LOGISTIC = [3075, 5491, 9804, 17504, 31252, 55797, 99618, 177847, 3174
 const FIT_GOMPERTZ = [1, 5, 35, 209, 1033, 4329, 15635, 49407, 138524, 348906, 798322, 1675995, 3257450, 5908470, 10073604, 16248107, 24936396, 36603460, 51627279, 70259814, 92601940];
 
 // Actual data: total AI commits padded with nulls for projection months
-const actualPadded = [...allCommits, null, null, null, null, null];
+const actualPadded = [...allCommits, null, null, null, null, null, null];
 
 // Upper bound: public data ÷ 0.185 (81.5% of GitHub is private repos)
 const upperBound = actualPadded.map(v => v !== null ? Math.round(v / 0.185) : null);
