@@ -1,5 +1,5 @@
 """
-Fit exponential, logistic, and Gompertz growth models to Claude commit data.
+Fit exponential, logistic, and Gompertz growth models to total AI commit data.
 Compare AIC/BIC, output parameters for the dashboard.
 """
 
@@ -9,24 +9,55 @@ import numpy as np
 from scipy.optimize import curve_fit
 from scipy.stats import pearsonr
 
-# Real data: Claude commits per month
+# Real data: commits per month by tool
 # Index 9 (Oct 2025) is incomplete — exclude from fitting
 labels = [
     "2025-01", "2025-02", "2025-03", "2025-04", "2025-05",
     "2025-06", "2025-07", "2025-08", "2025-09", "2025-10",
-    "2025-11", "2025-12", "2026-01", "2026-02",
+    "2025-11", "2025-12", "2026-01", "2026-02", "2026-03",
 ]
 claude = [
     24, 2139, 23273, 21703, 43017,
     224256, 440682, 557127, 486418, 170227,
-    1167145, 1553216, 3145469, 5187311,
+    1167145, 1553216, 3145469, 5187311, 10192831,
+]
+jules = [
+    21, 25, 126, 188, 26297,
+    62720, 42590, 70848, 63173, 55890,
+    52814, 81813, 119583, 129069, 116951,
+]
+devin = [
+    2093, 2294, 3609, 3404, 6227,
+    3435, 4518, 5006, 2320, 615,
+    3430, 5983, 7034, 3978, 7462,
+]
+aider = [
+    205, 399, 347, 289, 278,
+    986, 7894, 6737, 5130, 1381,
+    9350, 6484, 5901, 6422, 7729,
+]
+gemini_assist = [
+    17, 10, 300, 257, 494,
+    2755, 8880, 14014, 12416, 12637,
+    11902, 10338, 11111, 8979, 7888,
+]
+openai_codex = [
+    374, 234, 254, 1474, 852,
+    558, 1037, 1669, 1465, 322,
+    3294, 1555, 4256, 7119, 24986,
+]
+
+# Total AI commits per month (all tools)
+total_ai = [
+    claude[i] + jules[i] + devin[i] + aider[i] + gemini_assist[i] + openai_codex[i]
+    for i in range(len(claude))
 ]
 
 # Exclude Oct 2025 (index 9) — incomplete data
-mask = [i != 9 for i in range(len(claude))]
-t_all = np.arange(len(claude))
+mask = [i != 9 for i in range(len(total_ai))]
+t_all = np.arange(len(total_ai))
 t = t_all[mask]
-y = np.array(claude)[mask]
+y = np.array(total_ai)[mask]
 
 
 # --- Model definitions ---
@@ -126,8 +157,8 @@ best = min(results.items(), key=lambda x: x[1]["aic"])
 print(f"Best model by AIC: {best[0]}")
 
 # Project 6 months ahead (to Sep 2026)
-t_proj = np.arange(len(claude) + 6)
-proj_labels = labels + ["2026-03", "2026-04", "2026-05", "2026-06", "2026-07", "2026-08"]
+t_proj = np.arange(len(total_ai) + 6)
+proj_labels = labels + ["2026-04", "2026-05", "2026-06", "2026-07", "2026-08", "2026-09"]
 
 print("\n--- Dashboard values (JSON) ---")
 dashboard = {}

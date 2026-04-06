@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>botcommits.dev - Tracking AI-Generated Commits on GitHub</title>
-<meta name="description" content="Live dashboard tracking AI-generated commits across all public GitHub repos. Claude Code grew from 24 to 5.2M commits/month in 13 months. Updated monthly with real BigQuery data.">
-<meta name="keywords" content="AI commits, vibe coding, Claude Code, GitHub, AI-generated code, Copilot, Aider, Devin, developer productivity, open source, bot commits">
+<meta name="description" content="Live dashboard tracking AI-generated commits across all public GitHub repos. Claude Code grew from 24 to 10.2M commits/month in 15 months. Updated monthly with real BigQuery data.">
+<meta name="keywords" content="AI commits, vibe coding, Claude Code, GitHub, AI-generated code, Copilot, Aider, Devin, developer productivity, open source, bot commits, singularity, AI singularity">
 <meta name="author" content="Edgardo Munoz">
 <link rel="canonical" href="https://botcommits.dev">
 <link rel="icon" type="image/png" href="favicon.png">
@@ -16,7 +16,7 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://botcommits.dev">
 <meta property="og:title" content="botcommits.dev - Every AI Commit on GitHub, Tracked">
-<meta property="og:description" content="Claude Code: 24 commits in Jan 2025. 5.2 million in Feb 2026. A 216,000x increase in 13 months. Live dashboard with real data.">
+<meta property="og:description" content="Claude Code: 24 commits in Jan 2025. 10.2 million in Mar 2026. A 424,000x increase in 15 months. Live dashboard with real data.">
 <meta property="og:site_name" content="botcommits.dev">
 <meta property="og:image" content="https://botcommits.dev/og-image.png">
 <meta property="og:image:width" content="1200">
@@ -25,7 +25,7 @@
 <!-- Twitter/X -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="botcommits.dev - Every AI Commit on GitHub, Tracked">
-<meta name="twitter:description" content="Claude Code: 24 commits in Jan 2025. 5.2 million in Feb 2026. A 216,000x increase in 13 months.">
+<meta name="twitter:description" content="Claude Code: 24 commits in Jan 2025. 10.2 million in Mar 2026. A 424,000x increase in 15 months.">
 <meta name="twitter:image" content="https://botcommits.dev/og-image.png">
 
 <!-- Structured data for Google -->
@@ -41,12 +41,12 @@
     "@type": "Person",
     "name": "Edgardo Munoz"
   },
-  "dateModified": "2026-03-08",
+  "dateModified": "2026-04-06",
   "about": {
     "@type": "Dataset",
     "name": "AI-Attributed GitHub Commits",
     "description": "Monthly counts of AI-generated commits detected via attribution markers in public GitHub repositories",
-    "temporalCoverage": "2025-01/2026-03",
+    "temporalCoverage": "2025-01/2026-04",
     "creator": {"@type": "Person", "name": "Edgardo Munoz"},
     "distribution": {
       "@type": "DataDownload",
@@ -66,7 +66,7 @@
       "name": "How many AI-generated commits are on GitHub?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "As of February 2026, over 5.3 million AI-attributed commits per month are detected on public GitHub repos, spanning Claude Code, Jules, Devin, Aider, Gemini Code Assist, and OpenAI Codex CLI. The true number is higher as Copilot, Cursor, and Gemini CLI leave no commit-level markers."
+        "text": "As of March 2026, over 10.3 million AI-attributed commits per month are detected on public GitHub repos, spanning Claude Code, Jules, Devin, Aider, Gemini Code Assist, and OpenAI Codex CLI. The true number is higher as Copilot, Cursor, and Gemini CLI leave no commit-level markers."
       }
     },
     {
@@ -74,7 +74,7 @@
       "name": "How fast is AI-generated code growing on GitHub?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Claude Code grew from 24 commits in January 2025 to 5.19 million in February 2026 — a 216,000x increase in 13 months. The best-fit model is exponential with a doubling time of approximately 1.38 months."
+        "text": "Claude Code grew from 24 commits in January 2025 to 10.2 million in March 2026 — a 424,000x increase in 15 months. The best-fit model is exponential with a doubling time of approximately 1.2 months."
       }
     },
     {
@@ -82,7 +82,7 @@
       "name": "What percentage of GitHub code is written by AI?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "AI-attributed commits represent about 7.9% of all public GitHub push events. Adjusting for larger diff sizes in AI commits (2.5x), the estimated code volume share is approximately 19.6%. This excludes Copilot and Cursor which leave no markers."
+        "text": "AI-attributed commits represent about 12.3% of all public GitHub push events. Adjusting for larger diff sizes in AI commits (2.5x), the estimated code volume share is approximately 30.8%. This excludes Copilot and Cursor which leave no markers."
       }
     },
     {
@@ -259,9 +259,9 @@
       <canvas id="fitChart"></canvas>
     </div>
     <div style="margin-top:12px; display:flex; gap:24px; flex-wrap:wrap; font-size:0.8rem; color:#5a4a3a;">
-      <div><strong>Exponential</strong> y = a&middot;e<sup>bt</sup> &mdash; R²=0.989, AIC=314.7</div>
-      <div><strong>Logistic</strong> y = L/(1+e<sup>-k(t-t₀)</sup>) &mdash; R²=0.989, AIC=316.7, ceiling hit upper bound</div>
-      <div><strong>Gompertz</strong> y = L&middot;e<sup>-e<sup>-k(t-t₀)</sup></sup> &mdash; R²=0.981, AIC=323.8, ceiling ~641M</div>
+      <div><strong>Exponential</strong> y = a&middot;e<sup>bt</sup> &mdash; R²=0.987, AIC=318.3</div>
+      <div><strong>Logistic</strong> y = L/(1+e<sup>-k(t-t₀)</sup>) &mdash; R²=0.986, AIC=320.3, ceiling hit upper bound</div>
+      <div><strong>Gompertz</strong> y = L&middot;e<sup>-e<sup>-k(t-t₀)</sup></sup> &mdash; R²=0.977, AIC=327.3, ceiling ~560M</div>
     </div>
     <p style="margin-top:8px; font-size:0.8rem; color:#7a6652;">
       Best fit by AIC: <strong>Exponential</strong>. The logistic ceiling converged to the upper bound (~1B), meaning the data does not yet show saturation.
@@ -294,9 +294,9 @@
       </div>
     </div>
     <p style="margin-top:12px; font-size:0.8rem; color:#7a6652; border-top:1px solid #e0d5c7; padding-top:10px;">
-      <strong>Methodology:</strong> We observe 5.19M Claude commits in Feb 2026 from public repos.
+      <strong>Methodology:</strong> We observe 10.2M Claude commits in Mar 2026 from public repos.
       Since 81.5% of GitHub activity is private, and assuming similar AI adoption in private repos,
-      the total is estimated at 5.19M &divide; 0.185 &approx; <strong>28M commits/month</strong>.
+      the total is estimated at 10.2M &divide; 0.185 &approx; <strong>55M commits/month</strong>.
       This is speculative — enterprise adoption may be higher or lower than public repo rates.
       Copilot, Cursor, and Gemini CLI leave no commit-level attribution markers and are excluded entirely.
     </p>
@@ -353,7 +353,7 @@
       <p><strong>Data sources</strong></p>
       <ul style="margin: 4px 0 12px 20px;">
         <li><strong>Jan - Oct 2025:</strong> <a href="https://www.gharchive.org/" style="color:#b5451b">GH Archive</a> via Google BigQuery. Exact commit-level counts from PushEvent payloads.</li>
-        <li><strong>Nov 2025 - Feb 2026:</strong> GitHub Search API (approximate). GH Archive stopped including commit message payloads in Nov 2025, reducing table size from ~400 GB/month to ~89 GB. We fall back to GitHub's commit search endpoint, which returns total_count estimates that may differ from exact counts.</li>
+        <li><strong>Nov 2025 - Apr 2026:</strong> GitHub Search API (approximate). GH Archive stopped including commit message payloads in Nov 2025, reducing table size from ~400 GB/month to ~89 GB. We fall back to GitHub's commit search endpoint, which returns total_count estimates that may differ from exact counts.</li>
         <li><strong>Mar 2026*:</strong> Forecast. 1,723,910 commits observed in 8 days (Mar 1-8), linearly extrapolated to 31 days.</li>
       </ul>
       <p><strong>Detection signals</strong></p>
@@ -363,7 +363,7 @@
         <li><strong>OpenAI Codex CLI:</strong> <code>Co-Authored-By: ... @openai.com</code>, <code>noreply@openai.com</code> author email.</li>
         <li><strong>Jules (Google):</strong> <code>google-labs-jules[bot]</code> actor/author. Commits authored directly by the Jules GitHub App bot account.</li>
         <li><strong>Gemini Code Assist:</strong> <code>Co-Authored-By: gemini-code-assist[bot]</code> trailers. Only captures applied code review suggestions, not all Gemini-assisted code.</li>
-        <li><strong>Devin:</strong> Jan-Oct: <code>devin-ai-integration</code> actor/author in BigQuery. Nov+: <code>co-authored-by devin-ai</code> via GitHub Search API (author-based search returned 0; co-author trailer search works). Detection method differs between periods.</li>
+        <li><strong>Devin:</strong> Jan-Oct 2025: <code>devin-ai-integration</code> actor/author in BigQuery. Nov 2025+: <code>co-authored-by devin-ai</code> via GitHub Search API (author-based search returned 0; co-author trailer search works). Detection method differs between periods.</li>
       </ul>
       <p><strong>Known limitations</strong></p>
       <ul style="margin: 4px 0 12px 20px;">
@@ -375,12 +375,12 @@
       </ul>
       <p><strong>Model fitting</strong></p>
       <ul style="margin: 4px 0 12px 20px;">
-        <li>Three models fitted to Claude commit counts using <code>scipy.optimize.curve_fit</code> (nonlinear least squares): <strong>Exponential</strong> (2 params), <strong>Logistic</strong> (3 params), <strong>Gompertz</strong> (3 params).</li>
+        <li>Three models fitted to <strong>total AI commit counts</strong> (all tools combined) using <code>scipy.optimize.curve_fit</code> (nonlinear least squares): <strong>Exponential</strong> (2 params), <strong>Logistic</strong> (3 params), <strong>Gompertz</strong> (3 params).</li>
         <li><strong>Oct 2025 excluded</strong> from fitting due to incomplete data. 13 data points used.</li>
         <li>Model comparison via AIC (Akaike Information Criterion): lower = better fit with parsimony penalty for extra parameters.</li>
-        <li><strong>Exponential wins</strong> (AIC=314.7 vs 316.7 logistic, 323.8 Gompertz). The logistic ceiling parameter converged to its upper bound (~1B), meaning the optimizer found no evidence of saturation in the data. Effectively, the logistic degenerates to an exponential with an extra unused parameter.</li>
+        <li><strong>Exponential wins</strong> (AIC=318.3 vs 320.3 logistic, 327.3 Gompertz). The logistic ceiling parameter converged to its upper bound (~1B), meaning the optimizer found no evidence of saturation in the data. Effectively, the logistic degenerates to an exponential with an extra unused parameter.</li>
         <li>This does <strong>not</strong> predict indefinite exponential growth. It means the inflection point of the S-curve has not yet been observed with 14 months of data. More data points are needed to distinguish the models.</li>
-        <li>Projections beyond Feb 2026 are extrapolations and should be treated with appropriate skepticism. The exponential projects 104M commits/month by Aug 2026; the Gompertz projects 40M. The true value likely falls between them.</li>
+        <li>Projections beyond Mar 2026 are extrapolations and should be treated with appropriate skepticism. The exponential projects 324M total AI commits/month by Sep 2026; the Gompertz projects 93M. The true value likely falls between them.</li>
       </ul>
       <p style="margin-top:12px;"><strong>Open source</strong></p>
       <p style="margin:4px 0 0 0;">Raw data (CSV), BigQuery queries, Python analysis scripts, and this dashboard are all available at <a href="https://github.com/edgardomunoznajar/github_explosion" style="color:#b5451b">github.com/edgardomunoznajar/github_explosion</a>. Contributions and corrections welcome via pull requests.</p>
@@ -389,29 +389,27 @@
 
   </main>
   <footer>
-    Last updated: 2026-03-08. Open source &mdash; data, queries, and code on <a href="https://github.com/edgardomunoznajar/github_explosion">GitHub</a>. PRs welcome.
+    Last updated: 2026-04-06. Open source &mdash; data, queries, and code on <a href="https://github.com/edgardomunoznajar/github_explosion">GitHub</a>. PRs welcome.
   </footer>
 </div>
 
 <script>
-// ── Real data from BigQuery + GitHub Search API (queried 2026-03-08) ──
+// ── Real data from BigQuery + GitHub Search API (queried 2026-04-06) ──
 // Jan-Oct 2025: BigQuery (GH Archive, exact counts)
 // Nov 2025+: GitHub Search API (approximate, GH Archive stopped including commit payloads)
-const LABELS = ['2025-01','2025-02','2025-03','2025-04','2025-05','2025-06','2025-07','2025-08','2025-09','2025-10','2025-11','2025-12','2026-01','2026-02','2026-03*'];
+const LABELS = ['2025-01','2025-02','2025-03','2025-04','2025-05','2025-06','2025-07','2025-08','2025-09','2025-10','2025-11','2025-12','2026-01','2026-02','2026-03','2026-04*'];
 
-// March 2026: 1,723,910 in 8 days, extrapolated to full month
-const MAR_PARTIAL = 1723910;
-const MAR_DAYS = 8;
-const MAR_DAYS_JULES = 9; // Jules/Gemini Assist queried on Mar 9
-const MAR_FORECAST = Math.round(MAR_PARTIAL / MAR_DAYS * 31);
+// April 2026: partial data (6 days), extrapolated to full month
+const APR_PARTIAL_DAYS = 6;
+const APR_DAYS_TOTAL = 30;
 
 const TOOLS = {
-  claude:      [24, 2139, 23273, 21703, 43017, 224256, 440682, 557127, 486418, 170227, 1167145, 1553216, 3145469, 5187311, MAR_FORECAST],
-  jules:       [21, 25, 126, 188, 26297, 62720, 42590, 70848, 63173, 55890, 52814, 81813, 119583, 129069, Math.round(29530/MAR_DAYS_JULES*31)],
-  devin:       [2093, 2294, 3609, 3404, 6227, 3435, 4518, 5006, 2320, 615, 3430, 5983, 7034, 3978, Math.round(1436/MAR_DAYS*31)],
-  aider:       [205, 399, 347, 289, 278, 986, 7894, 6737, 5130, 1381, 9350, 6484, 5901, 6422, Math.round(1993/MAR_DAYS*31)],
-  gemini_assist:[17, 10, 300, 257, 494, 2755, 8880, 14014, 12416, 12637, 11902, 10338, 11111, 8979, Math.round(1867/MAR_DAYS_JULES*31)],
-  openai_codex:[374, 234, 254, 1474, 852, 558, 1037, 1669, 1465, 322, 3294, 1555, 4256, 7119, Math.round(3293/MAR_DAYS*31)],
+  claude:      [24, 2139, 23273, 21703, 43017, 224256, 440682, 557127, 486418, 170227, 1167145, 1553216, 3145469, 5187311, 10192831, Math.round(1993207/APR_PARTIAL_DAYS*APR_DAYS_TOTAL)],
+  jules:       [21, 25, 126, 188, 26297, 62720, 42590, 70848, 63173, 55890, 52814, 81813, 119583, 129069, 116951, Math.round(16367/APR_PARTIAL_DAYS*APR_DAYS_TOTAL)],
+  devin:       [2093, 2294, 3609, 3404, 6227, 3435, 4518, 5006, 2320, 615, 3430, 5983, 7034, 3978, 7462, Math.round(899/APR_PARTIAL_DAYS*APR_DAYS_TOTAL)],
+  aider:       [205, 399, 347, 289, 278, 986, 7894, 6737, 5130, 1381, 9350, 6484, 5901, 6422, 7729, Math.round(1510/APR_PARTIAL_DAYS*APR_DAYS_TOTAL)],
+  gemini_assist:[17, 10, 300, 257, 494, 2755, 8880, 14014, 12416, 12637, 11902, 10338, 11111, 8979, 7888, Math.round(1197/APR_PARTIAL_DAYS*APR_DAYS_TOTAL)],
+  openai_codex:[374, 234, 254, 1474, 852, 558, 1037, 1669, 1465, 322, 3294, 1555, 4256, 7119, 24986, Math.round(2792/APR_PARTIAL_DAYS*APR_DAYS_TOTAL)],
 };
 
 const TOTAL_PUSHES = {
@@ -419,7 +417,8 @@ const TOTAL_PUSHES = {
   '2025-04': 103264033, '2025-05': 94987478, '2025-06': 66832515,
   '2025-07': 71516129,  '2025-08': 71718183, '2025-09': 71478121,
   '2025-10': 61226053,  '2025-11': 75069424, '2025-12': 75625427,
-  '2026-01': 74652688,  '2026-02': 65997599, '2026-03*': 70000000, // estimated
+  '2026-01': 74652688,  '2026-02': 65997599, '2026-03': 83965677,
+  '2026-04*': Math.round(13199061/APR_PARTIAL_DAYS*APR_DAYS_TOTAL),
 };
 
 // Data source boundary marker
@@ -436,8 +435,8 @@ const aiSharePct = LABELS.map((label, i) =>
 );
 
 // Distinct repos/devs — BigQuery data for Jan-Oct, not available from Search API for Nov+
-const REPOS =  [12, 421, 2612, 2183, 4842, 21457, 40349, 54291, 50823, 21182, null, null, null, null];
-const DEVS  =  [11, 376, 2031, 1727, 3516, 14539, 27349, 36692, 35671, 16630, null, null, null, null];
+const REPOS =  [12, 421, 2612, 2183, 4842, 21457, 40349, 54291, 50823, 21182, null, null, null, null, null, null];
+const DEVS  =  [11, 376, 2031, 1727, 3516, 14539, 27349, 36692, 35671, 16630, null, null, null, null, null, null];
 
 // ── Chart defaults ────────────────────────────────────────────────────
 Chart.defaults.color = '#7a6652';
@@ -503,15 +502,15 @@ new Chart(document.getElementById('toolChart'), {
 });
 
 // ── Model fit chart ───────────────────────────────────────────────────
-const PROJ_LABELS = ['2025-01','2025-02','2025-03','2025-04','2025-05','2025-06','2025-07','2025-08','2025-09','2025-10','2025-11','2025-12','2026-01','2026-02','2026-03','2026-04','2026-05','2026-06','2026-07','2026-08'];
+const PROJ_LABELS = ['2025-01','2025-02','2025-03','2025-04','2025-05','2025-06','2025-07','2025-08','2025-09','2025-10','2025-11','2025-12','2026-01','2026-02','2026-03','2026-04','2026-05','2026-06','2026-07','2026-08','2026-09'];
 
-// Fitted values from scipy.optimize.curve_fit (see analysis/fit_models.py)
-const FIT_EXP =      [7506, 12401, 20489, 33851, 55928, 92402, 152665, 252229, 416726, 688505, 1137530, 1879400, 3105099, 5130169, 8475940, 14003740, 23136638, 38225789, 63155715, 104344332];
-const FIT_LOGISTIC = [7400, 12244, 20259, 33521, 55463, 91766, 151829, 251193, 415558, 687401, 1136871, 1879683, 3106326, 5129337, 8458667, 13918751, 22822206, 37206073, 60097937, 95674898];
-const FIT_GOMPERTZ = [62, 261, 960, 3147, 9290, 24918, 61241, 138995, 293383, 579616, 1078106, 1898086, 3178468, 5085023, 7803638, 11530031, 16457034, 22760915, 30588386, 40045751];
+// Fitted values from scipy.optimize.curve_fit on total AI commits (see analysis/fit_models.py)
+const FIT_EXP =      [3189, 5675, 10099, 17971, 31981, 56913, 101279, 180233, 320735, 570769, 1015718, 1807532, 3216614, 5724162, 10186499, 18127500, 32259000, 57406872, 102159055, 181798314, 323521269];
+const FIT_LOGISTIC = [3075, 5491, 9804, 17504, 31252, 55797, 99618, 177847, 317491, 566720, 1011395, 1804352, 3217004, 5729292, 10183482, 18037724, 31755383, 55317610, 94653709, 157303818, 249971860];
+const FIT_GOMPERTZ = [1, 5, 35, 209, 1033, 4329, 15635, 49407, 138524, 348906, 798322, 1675995, 3257450, 5908470, 10073604, 16248107, 24936396, 36603460, 51627279, 70259814, 92601940];
 
-// Actual data padded with nulls for projection months
-const actualPadded = [...TOOLS.claude, null, null, null, null, null, null];
+// Actual data: total AI commits padded with nulls for projection months
+const actualPadded = [...allCommits, null, null, null, null, null];
 
 // Upper bound: public data ÷ 0.185 (81.5% of GitHub is private repos)
 const upperBound = actualPadded.map(v => v !== null ? Math.round(v / 0.185) : null);
@@ -534,7 +533,7 @@ new Chart(document.getElementById('fitChart'), {
         spanGaps: false,
       },
       {
-        label: 'Actual (Claude, public only)',
+        label: 'Actual (all AI tools, public only)',
         data: actualPadded,
         borderColor: '#2d1f0e',
         backgroundColor: 'rgba(45,31,14,0.15)',
@@ -546,7 +545,7 @@ new Chart(document.getElementById('fitChart'), {
         spanGaps: false,
       },
       {
-        label: 'Exponential fit (R²=0.989)',
+        label: 'Exponential fit (R²=0.993)',
         data: FIT_EXP,
         borderColor: '#b5451b',
         borderDash: [12, 4],
@@ -557,7 +556,7 @@ new Chart(document.getElementById('fitChart'), {
         borderWidth: 3,
       },
       {
-        label: 'Logistic fit (R²=0.989)',
+        label: 'Logistic fit (R²=0.993)',
         data: FIT_LOGISTIC,
         borderColor: '#2563eb',
         borderDash: [4, 4],
