@@ -38,3 +38,4 @@ Thumbs.db
 # BigQuery credentials
 *-credentials.json
 *-service-account.json
+data/search_collector_run.log
