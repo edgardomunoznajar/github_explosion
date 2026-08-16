@@ -112,7 +112,7 @@
     <div class="stat-card">
       <div class="number" id="c-share">--</div>
       <div class="label">AI share of public commits, <span class="lastm"></span></div>
-      <div class="change muted">push events as denominator, see notes</div>
+      <div class="change muted">of push events; ≈6–18% of commits depending on commits-per-push, see notes</div>
     </div>
   </div>
 
@@ -131,7 +131,7 @@
     <div class="chart-section">
       <h2>AI-attributed commits as a share of public push events</h2>
       <div class="chart-container"><canvas id="shareChart"></canvas></div>
-      <p class="note"><strong>Denominator:</strong> monthly PushEvents from GH Archive (BigQuery). GitHub's Octoverse 2025 reports 986M commits for 2025 against ~1.0B push events in the same data, so push events are used as a ~1:1 proxy for unique commits; the raw payload <code>size</code> field (avg 3.8) over-counts because merges re-push branch commits. The March page's "×2.5 code-volume adjustment" is dropped: agent commits are larger than human ones (Robbes et al. 2026), but no defensible multiplier exists for this denominator.</p>
+      <p class="note"><strong>Denominator:</strong> monthly PushEvents from GH Archive (BigQuery). The commits-per-push ratio is genuinely uncertain: GitHub's Octoverse 2025 reports 986M commits for 2025 against ~1.0B push events in GH Archive (≈1:1), while the payload <code>size</code> field averages 3.8 (over-counting merges) and a March-2026 SemiAnalysis estimate that Claude Code was 4.5% of public commits implies ≈3 commits per push. Read the share as a range — ~6% of commits at 3:1, ~18% at 1:1 — until GitHub publishes a monthly commit denominator. The March page's "×2.5 code-volume adjustment" is dropped: agent commits are larger than human ones (Robbes et al. 2026), but no defensible multiplier exists for this denominator.</p>
     </div>
   </div>
 
