@@ -122,6 +122,12 @@
     <p class="note" id="bend-note"></p>
   </div>
 
+  <div class="chart-section">
+    <h2>The same curve on a linear axis: where on the S are we? <small>(Claude Code; sigmoid fits to all data, projected to <span id="sig-end"></span>)</small></h2>
+    <div class="chart-container" style="height:420px;"><canvas id="sigmoidChart"></canvas></div>
+    <p class="note" id="sig-note"></p>
+  </div>
+
   <div class="grid-2">
     <div class="chart-section">
       <h2>Month-on-month growth, Claude Code <small>(from Aug 2025; Oct 2025 now filled)</small></h2>
@@ -238,6 +244,31 @@ new Chart($('bendChart'), {
               x: { grid: { display: false } } } }
 });
 $('bend-note').innerHTML = 'Solid line: measured (BigQuery through Sep 2025, windowed Search API after; Oct 2025 filled). Triangle: current month to date, not used in fits. Red dashes: the exponential fitted to data through Mar 2026 — the March page\'s headline model — projected forward; it predicted <strong>' + fmt(H.march_exp_pred_last_full) + '</strong> for ' + monthName(LFM) + ' against a measured ' + fmt(H.claude_last) + '. Blue/purple: sigmoids fitted to all data, inflection ' + monthName(H.inflection_month) + '. Cumulative Claude Code commits Jan 2025 → ' + monthName(L[L.length-1]) + ': ' + fmt(H.cumulative_claude) + ' (' + fmtFull(H.growth_since_jan25) + '× the Jan-2025 monthly count, for anyone still counting that way).';
+
+// ── sigmoid (linear axis) chart ─────────────────────────────────────────
+$('sig-end').textContent = monthName(PL[PL.length-1]);
+const ceilLine = v => PL.map(() => v);
+new Chart($('sigmoidChart'), {
+  type: 'line',
+  data: { labels: PL, datasets: [
+    { label: 'Actual (Claude Code, public)', data: claudeFull, borderColor: '#2d1f0e', backgroundColor: '#2d1f0e', borderWidth: 2, pointRadius: 4, tension: 0, spanGaps: false },
+    { label: 'Partial month, to date', data: claudePartial, borderColor: '#2d1f0e', backgroundColor: '#fff', borderWidth: 1.5, pointRadius: 5, pointStyle: 'triangle', showLine: false },
+    { label: 'Logistic fit (ceiling ' + fmt(F.logistic.ceiling) + ', inflection ' + monthName(PL[Math.round(F.logistic.inflection_t)]) + ')', data: F.logistic.fitted, borderColor: '#2563eb', backgroundColor: 'rgba(37,99,235,0.06)', fill: true, borderWidth: 2.5, pointRadius: 0, tension: 0.35 },
+    { label: 'Gompertz fit (ceiling ' + fmt(F.gompertz.ceiling) + ')', data: F.gompertz.fitted, borderColor: '#9333ea', borderDash: [6, 4], borderWidth: 2, pointRadius: 0, tension: 0.35 },
+    { label: 'Logistic ceiling', data: ceilLine(F.logistic.ceiling), borderColor: 'rgba(37,99,235,0.45)', borderDash: [2, 4], borderWidth: 1, pointRadius: 0 },
+    { label: 'Gompertz ceiling', data: ceilLine(F.gompertz.ceiling), borderColor: 'rgba(147,51,234,0.45)', borderDash: [2, 4], borderWidth: 1, pointRadius: 0 },
+    { label: 'March-2026 exponential forecast', data: hindExp.map(v => v != null && v <= F.gompertz.ceiling * 1.6 ? v : null), borderColor: '#c45a3c', borderDash: [10, 5], borderWidth: 2, pointRadius: 0, tension: 0.2 },
+  ]},
+  options: { responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, padding: 14 } },
+               tooltip: { callbacks: { label: c => c.dataset.label.split(' (')[0] + ': ' + fmt(c.parsed.y) } } },
+    scales: { y: { min: 0, max: Math.ceil(F.gompertz.ceiling * 1.15 / 5e6) * 5e6, grid: { color: '#f0e8dd' }, ticks: { callback: v => fmt(v) }, title: { display: true, text: 'commits/month (linear)' } },
+              x: { grid: { display: false } } } }
+});
+{
+  const li = Math.round(F.logistic.inflection_t), lastPct = Math.round(H.claude_last / F.logistic.ceiling * 100), gPct = Math.round(H.claude_last / F.gompertz.ceiling * 100);
+  $('sig-note').innerHTML = 'Linear axis, so the S is visible: the convex limb through ' + monthName(PL[li]) + ' (inflection of the logistic fit), then the concave limb. ' + monthName(LFM) + ' sits at <strong>' + lastPct + '%</strong> of the logistic ceiling and <strong>' + gPct + '%</strong> of the Gompertz ceiling; the Gompertz has the longer right tail, so the two diverge over the projection and the next few months decide between them. The March-2026 exponential (red) is clipped where it leaves the frame — it is at ' + fmt(H.march_exp_pred_last_full) + ' by ' + monthName(LFM) + '.';
+}
 
 // ── MoM chart ───────────────────────────────────────────────────────────
 const momL = [], momV = [];

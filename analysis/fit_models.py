@@ -59,7 +59,7 @@ SIX_TOOLS = list(BQ)          # the tools the site has always summed as "total A
 BQ_SIGMA_LOG = 0.05
 SEARCH_SIGMA_FLOOR = 0.10
 HINDCAST_LAST = "2026-03"     # last month on the March-2026 dashboard
-PROJECT_MONTHS = 6
+PROJECT_MONTHS = 12
 
 
 # ── series ──────────────────────────────────────────────────────────────────
